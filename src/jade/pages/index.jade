@@ -10,8 +10,8 @@ html(ng-app='app')
 
     body(ng-controller='ComposerListController as controller')
         h1 Composers
-        ul(ng-show="controller.composers")
-            li(ng-repeat='composer in controller.composers') {{composer.first_name}} {{composer.last_name}}
+        ul(ng-show='controller.composers')
+            li(class='composerListItem' composer='composer' ng-repeat='composer in controller.composers')
         .error(ng-show='error')
             pre {{error}}
 

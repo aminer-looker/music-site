@@ -21,16 +21,27 @@ module.exports = (grunt)->
             dist: ['./dist']
 
         jade:
-            all:
+            pages:
                 options:
                     pretty: true
                 files: [
                     expand: true
-                    cwd:  './src/jade'
+                    cwd:  './src/jade/pages'
                     src:  '**/*.jade'
                     dest: './dist/static'
                     ext:  '.html'
                 ]
+            templates:
+                options:
+                    client: true
+                    node: true
+                    processName: (f)->
+                        f = f.replace './src/jade/templates/', ''
+                        f = f.replace '.jade', ''
+                        f = f.replace /\//g, '_'
+                        return f
+                files:
+                    './src/coffee/client/templates.js': ['./src/jade/templates/**/*.jade']
 
         mochaTest:
             options:
@@ -58,7 +69,7 @@ module.exports = (grunt)->
                 tasks: ['rsync:server_source']
             jade:
                 files: ['./src/**/*.jade']
-                tasks: ['jade']
+                tasks: ['jade', 'browserify']
             sass:
                 files: ['./src/**/*.scss']
                 tasks: ['sass']
@@ -83,7 +94,7 @@ module.exports = (grunt)->
             console.log error if error?
             done()
 
-    grunt.registerTask 'build', ['rsync', 'jade', 'sass', 'browserify']
+    grunt.registerTask 'build', ['jade', 'rsync', 'sass', 'browserify']
 
     grunt.registerTask 'start', "Start the music-site server at port 8080", ->
       done = this.async()

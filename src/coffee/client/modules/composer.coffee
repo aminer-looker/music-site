@@ -4,6 +4,7 @@
 #
 
 angular = require 'angular'
+templates = require '../templates'
 
 ############################################################################################################
 
@@ -31,3 +32,13 @@ class ComposerListController
                 @$scope.error = errorText
 
 composer.controller 'ComposerListController', ComposerListController
+
+# Directives ###########################################################################
+
+composer.directive 'composerListItem', ->
+    return {
+        restrict: 'C'
+        scope:
+            composer: '='
+        template: templates['composer_list_item']
+    }

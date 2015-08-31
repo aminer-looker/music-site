@@ -16,5 +16,6 @@ module.exports = router = express.Router()
 
 router.get '/composers', (request, response)->
     response.sendPromise ->
-        Composer.findAll(orderBy: 'last_name').then (composers)->
-            return (c.toJSON() for c in composers)
+        Composer.findAll orderBy: ['last_name', 'first_name']
+            .then (composers)->
+                return (c.toJSON() for c in composers)
