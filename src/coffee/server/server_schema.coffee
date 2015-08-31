@@ -9,8 +9,8 @@ JsData = require 'js-data'
 
 exports.store = store = new JsData.DS()
 
-exports.Collection = store.defineResource require '../model/collection'
-exports.Composer   = store.defineResource require '../model/composer'
-exports.Instrument = store.defineResource require '../model/instrument'
-exports.Type       = store.defineResource require '../model/type'
-exports.Work       = store.defineResource require '../model/work'
+exports.Collection = store.defineResource require '../model/collections'
+exports.Composer   = store.defineResource require '../model/composers'
+exports.Instrument = store.defineResource require '../model/instruments'
+exports.Type       = store.defineResource require '../model/types'
+exports.Work       = store.defineResource require '../model/works'

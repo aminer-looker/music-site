@@ -8,7 +8,11 @@ html(ng-app='app')
     head
         title Classical Music DB
 
-    body
-        h1 TODO
+    body(ng-controller='ComposerListController as controller')
+        h1 Composers
+        ul(ng-show="controller.composers")
+            li(ng-repeat='composer in controller.composers') {{composer.first_name}} {{composer.last_name}}
+        .error(ng-show='error')
+            pre {{error}}
 
         script(src='client.js')

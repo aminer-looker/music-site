@@ -8,3 +8,6 @@ angular = require 'angular'
 ############################################################################################################
 
 module.exports = schema = angular.module 'schema', ['js-data']
+
+schema.factory 'Composer', (DS)->
+    return DS.defineResource require '../model/composers'

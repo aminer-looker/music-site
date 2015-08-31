@@ -7,11 +7,15 @@ if typeof(global) is 'undefined'
     window.global = window
 
 require 'js-data'
-require 'js-data-angular'
+require 'js-data-angular' # must follow js-data
+
 require './client_schema'
+require './modules/composer'
 
 angular = require 'angular'
 
-angular.module 'app', ['js-data', 'schema']
+############################################################################################################
+
+angular.module 'app', ['composer']
 
 console.log "Classical Music DB Client is Ready"

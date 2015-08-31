@@ -4,15 +4,15 @@
 #
 
 w = require 'when'
-global.Promise = w.promise # must be before JS-Data loads
+global.Promise = w.Promise # must be before JS-Data loads
 
-_          = require 'underscore'
 express    = require 'express'
 http       = require 'http'
-SqlAdapter = require 'js-data-sql'
 middleware = require './middleware'
 routes     = require './routes'
 schema     = require './server_schema'
+SqlAdapter = require 'js-data-sql'
+_          = require 'underscore'
 
 ############################################################################################################
 
@@ -45,9 +45,9 @@ module.exports = class Server
     _configureRouter: ->
         app = express()
 
-        app.use m for m in middleware.before
+        middleware.installBefore app
         app.use routes
-        app.use m for m in middleware.after
+        middleware.installAfter app
 
         return app
 
@@ -60,7 +60,9 @@ module.exports = class Server
             client: 'mysql'
             connection:
                 host: 'localhost'
-                user: 'root'
+                database: 'music'
+                user: 'music-site-app'
+                password: '9q{o3bBt7M11'
 
         schema.store.registerAdapter 'sql', adapter, default:true
         return schema.store

@@ -3,7 +3,16 @@
 # All rights reserved.
 #
 
+_ = require 'underscore'
+
 ############################################################################################################
 
 module.exports =
-    name: 'type'
+
+    name:     'composer'
+    endpoint: '/composers'
+    table:    'composers'
+    methods:
+
+        toJSON: ->
+            return _.pick this, 'id', 'first_name', 'last_name'
