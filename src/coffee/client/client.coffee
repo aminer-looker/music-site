@@ -17,5 +17,7 @@ angular = require 'angular'
 ############################################################################################################
 
 angular.module 'app', ['composer']
+    .config ($locationProvider)->
+        $locationProvider.html5Mode true
 
 console.log "Classical Music DB Client is Ready"

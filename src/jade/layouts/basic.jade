@@ -1,0 +1,20 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+doctype html
+html(ng-app='app')
+    head
+        title
+            block title
+                | Classical Music DB
+        base(href='/')
+        link(rel='stylesheet', type='text/css', href='/main.css')
+
+    body
+        block content
+            // Oops... someone forgot to override the basic content block
+
+        block scripts
+            script(src='/client.js')

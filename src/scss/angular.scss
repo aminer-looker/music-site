@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 
-@import 'reset';
-
-@import 'angular';
-@import 'tags';
+.ng-cloak {
+  display: none !important;
+}

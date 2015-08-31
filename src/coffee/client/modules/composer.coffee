@@ -3,8 +3,9 @@
 # All rights reserved.
 #
 
-angular = require 'angular'
+angular   = require 'angular'
 templates = require '../templates'
+_         = require 'underscore'
 
 ############################################################################################################
 
@@ -12,26 +13,59 @@ composer = angular.module 'composer', ['schema']
 
 # Controllers ##########################################################################
 
-class ComposerListController
+class ComposerBaseController
 
     constructor: ($scope, Composer)->
         @Composer = Composer
-        @composers = null
         @error = null
-        @$scope = $scope
 
         @refresh()
 
+    _reportError: (error)->
+        errorText = "#{error?.data?.stack}"
+        errorText ?= "#{error?.data}"
+        errorText ?= "#{error}"
+
+        console.error "Could not fetch for #{@constructor.name}: #{errorText}"
+        @error = errorText
+
+class ComposerListController extends ComposerBaseController
+
+    constructor: ($scope, Composer)->
+        @composers = null
+        super
+
     refresh: ->
         @Composer.findAll()
+            .catch (error)=> @_reportError error
             .then (composers)=>
                 @composers = composers
-            .catch (error)=>
-                errorText = if error.data? then "#{error.data}" else "#{error}"
-                console.error "Could not fetch composers: #{errorText}"
-                @$scope.error = errorText
 
 composer.controller 'ComposerListController', ComposerListController
+
+class ComposerPageController extends ComposerBaseController
+
+    URL_PATTERN = /\/composers\/(.*)$/
+
+    constructor: ($scope, Composer, $location)->
+        @id = @_extractId $location
+        @composer = null
+        super
+
+    refresh: ->
+        return unless @id
+
+        @Composer.find @id
+            .catch (error)=> @_reportError error
+            .then (composer)=>
+                @composer = composer
+
+    _extractId: ($location)->
+        match = URL_PATTERN.exec $location.path()
+        return match[1] if match? and _.isNumber parseInt match[1]
+        return null
+
+composer.controller 'ComposerPageController', ComposerPageController
 
 # Directives ###########################################################################
 

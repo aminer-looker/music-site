@@ -44,6 +44,7 @@ module.exports = class Server
 
     _configureRouter: ->
         app = express()
+        app.disable 'etag'
 
         middleware.installBefore app
         app.use routes

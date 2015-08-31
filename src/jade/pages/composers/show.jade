@@ -1,0 +1,14 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+extends ../../layouts/basic
+
+block content
+    div(ng-controller='ComposerPageController as controller')
+        h1(class="ng-cloak") {{controller.composer.first_name}} {{controller.composer.last_name}}
+        a(href='http://classicalmusicdb.com{{controller.composer.url}}') see on ClassicalMusic DB
+
+        .error(ng-show='controller.error')
+            pre {{controller.error}}

@@ -1,0 +1,14 @@
+/*
+ * Copyright (C) 2015 by Looker Data Services, Inc.
+ * All rights reserved.
+ */
+
+h1 {
+    font-size: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 0.4rem;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}

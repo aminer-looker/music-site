@@ -3,16 +3,12 @@
 //- All rights reserved.
 //-
 
-doctype html
-html(ng-app='app')
-    head
-        title Classical Music DB
+extends ../../layouts/basic
 
-    body(ng-controller='ComposerListController as controller')
+block content
+    div(ng-controller='ComposerListController as controller')
         h1 Composers
         ul(ng-show='controller.composers')
             li(class='composerListItem' composer='composer' ng-repeat='composer in controller.composers')
-        .error(ng-show='error')
-            pre {{error}}
-
-        script(src='client.js')
+        .error(ng-show='controller.error')
+            pre {{controller.error}}

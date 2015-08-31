@@ -4,4 +4,4 @@
 #
 
 module.exports =
-    foo: 'bar'
+    STATIC_BASE: './static'

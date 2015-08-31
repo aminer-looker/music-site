@@ -10,7 +10,7 @@ _ = require 'underscore'
 module.exports =
 
     name:     'composer'
-    endpoint: '/composers'
+    endpoint: '/api/composers'
     table:    'composers'
     methods:
 
