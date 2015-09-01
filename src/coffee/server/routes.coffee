@@ -6,6 +6,7 @@
 constants  = require '../constants'
 express    = require 'express'
 {Composer} = require './server_schema'
+w          = require 'when'
 
 ############################################################################################################
 
@@ -19,10 +20,17 @@ router.get '/', (request, response)->
 # Composer Routes ######################################################################
 
 router.get '/api/composers', (request, response)->
+    offset = parseInt(request.query.offset) or 0
+    limit = parseInt(request.query.limit) or constants.PAGE_SIZE
+
     response.sendPromise ->
-        Composer.findAll orderBy: ['last_name', 'first_name']
+        Composer.findAll orderBy: ['last_name', 'first_name'], offset:offset, limit:limit
             .then (composers)->
                 return (c.toJSON() for c in composers)
+
+router.get '/api/composers/count', (request, response)->
+    response.sendPromise ->
+        Composer.count()
 
 router.get '/api/composers/:id', (request, response)->
     response.sendPromise ->

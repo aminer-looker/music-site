@@ -4,6 +4,7 @@
 #
 
 angular   = require 'angular'
+mixin     = require '../mixin'
 templates = require '../templates'
 _         = require 'underscore'
 
@@ -32,14 +33,12 @@ class ComposerBaseController
 class ComposerListController extends ComposerBaseController
 
     constructor: ($scope, Composer)->
-        @composers = null
+        @Resource = Composer
+        mixin.Pageable this
         super
 
-    refresh: ->
-        @Composer.findAll()
-            .catch (error)=> @_reportError error
-            .then (composers)=>
-                @composers = composers
+    _onPageError: (error)->
+        @_reportError error
 
 composer.controller 'ComposerListController', ComposerListController
 

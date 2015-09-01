@@ -66,6 +66,7 @@ module.exports = class Server
                 password: '9q{o3bBt7M11'
 
         schema.store.registerAdapter 'sql', adapter, default:true
+        schema.installExtensions()
         return schema.store
 
 ############################################################################################################

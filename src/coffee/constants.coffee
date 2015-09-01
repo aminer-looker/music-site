@@ -5,3 +5,4 @@
 
 module.exports =
     STATIC_BASE: './static'
+    PAGE_SIZE: 20

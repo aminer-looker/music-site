@@ -8,7 +8,13 @@ extends ../../layouts/basic
 block content
     div(ng-controller='ComposerListController as controller')
         h1 Composers
-        ul(ng-show='controller.composers')
-            li(class='composerListItem' composer='composer' ng-repeat='composer in controller.composers')
+        ul(ng-show='controller.list')
+            li(class='composerListItem' composer='composer' ng-repeat='composer in controller.list')
+        button(
+            ng-class='controller.hasPrevPage() ? "" : "disabled"'
+            ng-click="controller.prevPage()") prev
+        button(
+            ng-class='controller.hasNextPage() ? "" : "disabled"'
+            ng-click="controller.nextPage()") next
         .error(ng-show='controller.error')
             pre {{controller.error}}
