@@ -9,6 +9,6 @@ block content
     div(ng-controller='ComposerPageController as controller')
         h1(class="ng-cloak") {{controller.composer.first_name}} {{controller.composer.last_name}}
         a(href='http://classicalmusicdb.com{{controller.composer.url}}') see on ClassicalMusic DB
-
+        p: a(href='/composers/' target='_self') back
         .error(ng-show='controller.error')
             pre {{controller.error}}
