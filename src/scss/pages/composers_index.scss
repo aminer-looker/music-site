@@ -6,7 +6,7 @@
 #composers-index {
     display: flex;
     flex-direction: column;
-    margin: 2rem auto;
+    margin: 0 auto;
     width: 66%;
 
     .composer-list {
@@ -18,35 +18,6 @@
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-        }
-
-        .button-row {
-            display: flex;
-            padding-top: 1.5rem;
-
-            button {
-                background: $color-gray-faint;
-                border: 1px solid $color-gray-light;
-                border-right: none;
-                color: $color-gray-medium;
-                font-family: $font-family-control;
-                font-size: $font-size-medium;
-                outline: none;
-                width: 50%;
-
-                &:first-of-type {
-                    border-radius: 1rem 0 0 1rem;
-                }
-
-                &:last-of-type {
-                    border-radius: 0 1rem 1rem 0;
-                    border-right: 1px solid $color-gray-light;
-                }
-
-                &.disabled {
-                    background: $color-white;
-                }
-            }
         }
     }
 }

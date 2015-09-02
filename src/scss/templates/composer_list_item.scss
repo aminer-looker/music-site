@@ -10,16 +10,7 @@
     width: calc(50% - 2rem);
 
     a {
-        color: $color-blue-medium;
         text-align: center;
-
-        &:active {
-            color: $color-blue-light;
-        }
-
-        &:visited {
-            color: $color-blue-dark;
-        }
 
         .first-name {
             font-size: $font-size-large;

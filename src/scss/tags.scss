@@ -4,11 +4,24 @@
  */
 
 a {
+    color: $color-blue-medium;
     text-decoration: none;
+
+    &:active {
+        color: $color-blue-light;
+    }
 
     &:hover {
         text-decoration: underline;
     }
+
+    &:visited {
+        color: $color-blue-dark;
+    }
+}
+
+body {
+    margin: 3rem 1.5rem;
 }
 
 h1 {

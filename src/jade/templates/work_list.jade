@@ -2,9 +2,10 @@ ul(ng-show='controller.list')
     li(ng-repeat='work in controller.list')
         a(class='ng-cloak' href='{{work.getDetailUrl()}}') {{work.title}}
 
-    button(
-        ng-class='controller.hasPrevPage() ? "" : "disabled"'
-        ng-click="controller.prevPage()") prev
-    button(
-        ng-class='controller.hasNextPage() ? "" : "disabled"'
-        ng-click='controller.nextPage()') next
+    .button-row
+        button(
+            ng-class='controller.hasPrevPage() ? "" : "disabled"'
+            ng-click="controller.prevPage()") prev
+        button(
+            ng-class='controller.hasNextPage() ? "" : "disabled"'
+            ng-click='controller.nextPage()') next
