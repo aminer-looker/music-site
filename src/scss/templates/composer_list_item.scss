@@ -6,7 +6,10 @@
 .composer-list-item {
     font-family: $font-family-title;
     margin: 1rem;
+    overflow: hidden;
     padding-left: 4rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     width: calc(50% - 2rem);
 
     a {
