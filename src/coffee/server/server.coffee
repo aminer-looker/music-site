@@ -12,7 +12,7 @@ middleware = require './middleware'
 routes     = require './routes'
 schema     = require './server_schema'
 SqlAdapter = require 'js-data-sql'
-_          = require 'underscore'
+_          = require '../underscore'
 
 ############################################################################################################
 

@@ -5,7 +5,7 @@
 
 JsData = require 'js-data'
 util   = require 'util'
-_      = require 'underscore'
+_      = require '../underscore'
 
 ############################################################################################################
 

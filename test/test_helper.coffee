@@ -5,7 +5,7 @@ chai.use require 'sinon-chai'
 
 chai.config.includeStack = true
 
-global._      = require 'underscore'
+global._      = require '../src/underscore'
 global.assert = chai.assert
 global.expect = chai.expect
 global.should = chai.should()

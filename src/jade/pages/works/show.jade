@@ -6,9 +6,13 @@
 extends ../../layouts/basic
 
 block content
-    div(ng-controller='WorkPageController as controller')
-        h1(class="ng-cloak") {{controller.model.title}}
-        a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
-        p: a(ng-href='{{controller.parentUrl}}' target='_self') back
-        .error(ng-show='controller.error')
+    #work-show(ng-controller='WorkPageController as controller')
+        .navigation(ng-show='controller.model.composer_id')
+            a(href='/composers/{{controller.model.composer_id}}' target='_self') « back to composer page
+
+        .header(class='ng-cloak' ng-show='controller.model.title')
+            h1 {{controller.model.title}}
+            a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
+
+        .error(class='ng-cloak' ng-show='controller.error')
             pre {{controller.error}}

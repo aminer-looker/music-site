@@ -10,7 +10,7 @@ block content
         .navigation
             a(href='/composers/' target='_self') « back to composer list
 
-        .header(ng-show='controller.model')
+        .header(class='ng-cloak' ng-show='controller.model.full_name')
             h1 {{controller.model.full_name}}
             a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
 

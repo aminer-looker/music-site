@@ -69,5 +69,5 @@ router.get '/api/works/:id', (request, response)->
             .then (work)->
                 return work.toJSON()
 
-router.get '/work/:id', (request, response)->
-    response.sendFile './work/show.html', root:constants.STATIC_BASE
+router.get '/works/:id', (request, response)->
+    response.sendFile './works/show.html', root:constants.STATIC_BASE

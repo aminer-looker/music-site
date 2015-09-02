@@ -1,6 +1,11 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
 ul(ng-show='controller.list')
     li(ng-repeat='work in controller.list')
-        a(class='ng-cloak' href='{{work.getDetailUrl()}}') {{work.title}}
+        a(class='ng-cloak' href='{{work.getDetailUrl()}}' target='_self') {{work.title}}
 
     .button-row
         button(
