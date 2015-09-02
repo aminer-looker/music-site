@@ -26,7 +26,10 @@ exports.installBefore = (app)->
 
 exports.installAfter = (app)->
     app.use m for m in [
-        express.static './static'
+        express.static('./static'
+            etag: false
+            maxAge: 0
+        )
     ]
 
 # Middleware Functions #####################################################################################

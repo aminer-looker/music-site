@@ -1,1 +1,8 @@
-a(href='{{composer.getDetailUrl()}}') {{composer.full_name}}
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+a(href='{{composer.getDetailUrl()}}')
+    | <span class="first-name">{{composer.last_name}}</span><span class="last-name">,
+    | {{composer.first_name}}</span>

@@ -67,9 +67,12 @@ module.exports = (grunt)->
             server_source:
                 files: ['./src/coffee/**/*.coffee']
                 tasks: ['rsync:server_source']
-            jade:
-                files: ['./src/**/*.jade']
-                tasks: ['jade', 'browserify']
+            jade_pages:
+                files: ['./src/jade/pages/**/*.jade']
+                tasks: ['jade:pages']
+            jade_templates:
+                files: ['./src/jade/templates/**/*.jade']
+                tasks: ['jade:templates', 'browserify']
             sass:
                 files: ['./src/**/*.scss']
                 tasks: ['sass']

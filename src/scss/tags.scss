@@ -3,8 +3,17 @@
  * All rights reserved.
  */
 
+a {
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
 h1 {
-    font-size: 2rem;
+    font-family: $font-family-title;
+    font-size: $font-size-large;
     margin-top: 1rem;
     margin-bottom: 0.4rem;
 
