@@ -1,0 +1,14 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+extends ../../layouts/basic
+
+block content
+    div(ng-controller='WorkPageController as controller')
+        h1(class="ng-cloak") {{controller.model.title}}
+        a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
+        p: a(ng-href='{{controller.parentUrl}}' target='_self') back
+        .error(ng-show='controller.error')
+            pre {{controller.error}}

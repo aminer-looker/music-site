@@ -5,8 +5,9 @@
 
 constants  = require '../constants'
 express    = require 'express'
-{Composer} = require './server_schema'
 w          = require 'when'
+{Composer} = require './server_schema'
+{Work}     = require './server_schema'
 
 ############################################################################################################
 
@@ -40,3 +41,33 @@ router.get '/api/composers/:id', (request, response)->
 
 router.get '/composers/:id', (request, response)->
     response.sendFile './composers/show.html', root:constants.STATIC_BASE
+
+# Work Routes ##########################################################################
+
+router.get '/api/works', (request, response)->
+    offset = parseInt(request.query.offset) or 0
+    limit = parseInt(request.query.limit) or constants.PAGE_SIZE
+    composer_id = parseInt(request.query.composer_id)
+
+    options = orderBy: ['title'], offset:offset, limit:limit
+    options.composer_id = composer_id if composer_id?
+
+    response.sendPromise ->
+        Work.findAll options
+            .then (works)->
+                return (c.toJSON() for c in works)
+
+router.get '/api/works/count', (request, response)->
+    response.sendPromise ->
+        Work.count (query)->
+            composer_id = request.query.composer_id
+            if composer_id? then query.where composer_id:composer_id
+
+router.get '/api/works/:id', (request, response)->
+    response.sendPromise ->
+        Work.find request.params.id
+            .then (work)->
+                return work.toJSON()
+
+router.get '/work/:id', (request, response)->
+    response.sendFile './work/show.html', root:constants.STATIC_BASE

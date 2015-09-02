@@ -15,6 +15,6 @@ block content
             ng-click="controller.prevPage()") prev
         button(
             ng-class='controller.hasNextPage() ? "" : "disabled"'
-            ng-click="controller.nextPage()") next
-        .error(ng-show='controller.error')
+            ng-click='controller.nextPage()') next
+        .error(class='ng-cloak' ng-show='controller.error')
             pre {{controller.error}}

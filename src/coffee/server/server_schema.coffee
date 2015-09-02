@@ -5,6 +5,7 @@
 
 JsData = require 'js-data'
 util   = require 'util'
+_      = require 'underscore'
 
 ############################################################################################################
 
@@ -14,10 +15,12 @@ exports.installExtensions = ->
     adapter = store.getAdapter 'sql'
 
     # Adds a "count" method to each Resource instance
-    store.defaults.count = ->
-        adapter.query.count('id as count').from(@table)
-            .then (resultSet)->
-                return resultSet[0].count
+    store.defaults.count = (applyFilter)->
+        query = adapter.query.count('id as count').from(@table)
+        if _.isFunction applyFilter then applyFilter query
+
+        query.then (resultSet)->
+            return resultSet[0].count
 
 exports.Collection = store.defineResource require '../model/collections'
 exports.Composer   = store.defineResource require '../model/composers'

@@ -3,10 +3,10 @@
 # All rights reserved.
 #
 
-angular   = require 'angular'
-mixin     = require '../mixin'
-templates = require '../templates'
-_         = require 'underscore'
+angular              = require 'angular'
+templates            = require '../templates'
+{DetailController}   = require '../base_controllers'
+{PageableController} = require '../base_controllers'
 
 ############################################################################################################
 
@@ -14,57 +14,17 @@ composer = angular.module 'composer', ['schema']
 
 # Controllers ##########################################################################
 
-class ComposerBaseController
+composer.controller 'ComposerListController', class ComposerListController extends PageableController
 
     constructor: ($scope, Composer)->
-        @Composer = Composer
-        @error = null
-
+        super $scope, Composer
         @refresh()
 
-    _reportError: (error)->
-        errorText = "#{error?.data?.stack}"
-        errorText ?= "#{error?.data}"
-        errorText ?= "#{error}"
-
-        console.error "Could not fetch for #{@constructor.name}: #{errorText}"
-        @error = errorText
-
-class ComposerListController extends ComposerBaseController
-
-    constructor: ($scope, Composer)->
-        @Resource = Composer
-        mixin.Pageable this
-        super
-
-    _onPageError: (error)->
-        @_reportError error
-
-composer.controller 'ComposerListController', ComposerListController
-
-class ComposerPageController extends ComposerBaseController
-
-    URL_PATTERN = /\/composers\/(.*)$/
+composer.controller 'ComposerPageController', class ComposerPageController extends DetailController
 
     constructor: ($scope, Composer, $location)->
-        @id = @_extractId $location
-        @composer = null
-        super
-
-    refresh: ->
-        return unless @id
-
-        @Composer.find @id
-            .catch (error)=> @_reportError error
-            .then (composer)=>
-                @composer = composer
-
-    _extractId: ($location)->
-        match = URL_PATTERN.exec $location.path()
-        return match[1] if match? and _.isNumber parseInt match[1]
-        return null
-
-composer.controller 'ComposerPageController', ComposerPageController
+        super $scope, Composer, $location
+        @refresh()
 
 # Directives ###########################################################################
 

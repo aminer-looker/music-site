@@ -6,17 +6,20 @@
 if typeof(global) is 'undefined'
     window.global = window
 
+# Load JSData libraries. The core library must be first.
 require 'js-data'
-require 'js-data-angular' # must follow js-data
+require 'js-data-angular'
 
-require './client_schema'
+# Include all our modules so they can register with Angular
+require './modules/client_schema'
 require './modules/composer'
+require './modules/work'
 
 angular = require 'angular'
 
 ############################################################################################################
 
-angular.module 'app', ['composer']
+angular.module 'app', ['composer', 'work']
     .config ($locationProvider)->
         $locationProvider.html5Mode true
 

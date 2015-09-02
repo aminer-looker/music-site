@@ -7,16 +7,16 @@ angular = require 'angular'
 
 ############################################################################################################
 
-module.exports = schema = angular.module 'schema', ['js-data']
+schema = angular.module 'schema', ['js-data']
 
 schema.run (DS)->
     adapter = DS.getAdapter 'http'
 
     # Adds a "count" method to each Resource instance
-    DS.defaults.count = ->
-        adapter.GET "#{@endpoint}/count"
+    DS.defaults.count = (params)->
+        adapter.GET "#{@endpoint}/count", params:params
             .then (response)->
                 return parseInt response.data
 
-schema.factory 'Composer', (DS)->
-    return DS.defineResource require '../model/composers'
+schema.factory 'Composer', (DS)-> DS.defineResource require '../../model/composers'
+schema.factory 'Work',     (DS)-> DS.defineResource require '../../model/works'

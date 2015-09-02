@@ -4,3 +4,4 @@
 .tm_properties
 dist
 node_modules
+templates.js

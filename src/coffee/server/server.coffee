@@ -64,6 +64,7 @@ module.exports = class Server
                 database: 'music'
                 user: 'music-site-app'
                 password: '9q{o3bBt7M11'
+            debug: false
 
         schema.store.registerAdapter 'sql', adapter, default:true
         schema.installExtensions()

@@ -12,6 +12,13 @@ module.exports =
     name:     'composer'
     endpoint: '/api/composers'
     table:    'composers'
+
+    computed:
+
+        full_name: ['first_name', 'last_name', (first_name, last_name)->
+            return "#{first_name} #{last_name}"
+        ]
+
     methods:
 
         getDetailUrl: ->
