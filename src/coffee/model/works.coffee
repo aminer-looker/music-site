@@ -32,3 +32,22 @@ module.exports =
                 'type_id'
                 'instrument_id'
                 'collection_id'
+
+    relations:
+
+        belongsTo:
+            composer:
+                localField: 'composer'
+                localKey:   'composer_id'
+                foreignKey: 'id'
+
+        hasOne:
+            instrument:
+                localField: 'instrument'
+                localKey:   'instrument_id'
+                foreignKey: 'id'
+
+            type:
+                localField: 'type'
+                localKey:   'type_id'
+                foreignKey: 'id'

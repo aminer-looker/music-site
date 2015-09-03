@@ -32,7 +32,19 @@ work.controller 'WorkPageController', class WorkPageController extends DetailCon
 
     constructor: ($scope, Work, $location)->
         super $scope, Work, $location
-        @refresh()
+        @refresh withRelations:['composer', 'instrument', 'type']
+            .then =>
+                $scope.$watch (=> @model), (=> @_updateFields())
+                @_updateFields()
+
+    _updateFields: ->
+        @instrumentation = @model?.instrument?.name or 'none'
+        @type            = @model?.type?.name       or 'none'
+        @composed        = @model?.composed         or 'none'
+        @difficulty      = @model?.difficulty       or 'none'
+
+        for field in ['instrumentation', 'type', 'composed', 'difficulty']
+            @["#{field}Class"] = if @[field] is 'none' then 'no-value' else ''
 
 # Directives ###########################################################################
 

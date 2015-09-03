@@ -18,5 +18,9 @@ schema.run (DS)->
             .then (response)->
                 return parseInt response.data
 
-schema.factory 'Composer', (DS)-> DS.defineResource require '../../model/composers'
-schema.factory 'Work',     (DS)-> DS.defineResource require '../../model/works'
+schema.factory 'Composer',   (DS)-> DS.defineResource require '../../model/composers'
+schema.factory 'Instrument', (DS)-> DS.defineResource require '../../model/instruments'
+schema.factory 'Type',       (DS)-> DS.defineResource require '../../model/types'
+schema.factory 'Work',       (DS)-> DS.defineResource require '../../model/works'
+
+schema.run (Composer, Instrument, Type, Work)-> # force the services to be created

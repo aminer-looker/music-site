@@ -14,11 +14,21 @@
         color: $color-gray-medium;
         font-family: $font-family-control;
         font-size: $font-size-medium;
-        outline: none;
         width: 50%;
 
         &:first-of-type {
             border-radius: 1rem 0 0 1rem;
+        }
+
+        &:hover {
+            background: $color-gray-light;
+            color: $color-gray-dark;
+        }
+
+        // must be after &:hover
+        &:active {
+            background: $color-black;
+            color: $color-white;
         }
 
         &:last-of-type {
@@ -28,6 +38,7 @@
 
         &.disabled {
             background: $color-white;
+            color: $color-gray-medium; // required to override &:active
         }
     }
 }

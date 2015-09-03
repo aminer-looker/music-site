@@ -65,8 +65,11 @@ module.exports = (grunt)->
                 files: ['./src/coffee/client/**/*.coffee']
                 tasks: ['browserify']
             server_source:
-                files: ['./src/coffee/**/*.coffee']
+                files: ['./src/coffee/server/**/*.coffee']
                 tasks: ['rsync:server_source']
+            shared_source:
+                files: ['./src/coffee/*.coffee', './src/coffee/model/**/*.coffee']
+                tasks: ['rsync:server_source', 'browserify']
             jade_pages:
                 files: ['./src/jade/pages/**/*.jade']
                 tasks: ['jade:pages']

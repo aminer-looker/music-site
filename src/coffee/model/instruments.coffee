@@ -3,7 +3,16 @@
 # All rights reserved.
 #
 
+_ = require '../underscore'
+
 ############################################################################################################
 
 module.exports =
-    name: 'instruments'
+    name:     'instrument'
+    endpoint: '/api/instruments'
+    table:    'instruments'
+
+    methods:
+
+        toJSON: ->
+            return _.pick this, 'id', 'name'

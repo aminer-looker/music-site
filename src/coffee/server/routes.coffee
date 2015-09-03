@@ -3,11 +3,13 @@
 # All rights reserved.
 #
 
-constants  = require '../constants'
-express    = require 'express'
-w          = require 'when'
-{Composer} = require './server_schema'
-{Work}     = require './server_schema'
+constants    = require '../constants'
+express      = require 'express'
+w            = require 'when'
+{Composer}   = require './server_schema'
+{Instrument} = require './server_schema'
+{Type}       = require './server_schema'
+{Work}       = require './server_schema'
 
 ############################################################################################################
 
@@ -42,6 +44,42 @@ router.get '/api/composers/:id', (request, response)->
 router.get '/composers/:id', (request, response)->
     response.sendFile './composers/show.html', root:constants.STATIC_BASE
 
+# Instrument Routes ####################################################################
+
+router.get '/api/instruments', (request, response)->
+    response.sendPromise ->
+        Instrument.findAll()
+            .then (instruments)->
+                return (i.toJSON() for i in instruments)
+
+router.get '/api/instruments/count', (request, response)->
+    response.sendPromise ->
+        Instrument.count()
+
+router.get '/api/instruments/:id', (request, response)->
+    response.sendPromise ->
+        Instrument.find request.params.id
+            .then (instrument)->
+                return instrument.toJSON()
+
+# Type Routes ####################################################################
+
+router.get '/api/types', (request, response)->
+    response.sendPromise ->
+        Type.findAll()
+            .then (types)->
+                return (i.toJSON() for i in types)
+
+router.get '/api/types/count', (request, response)->
+    response.sendPromise ->
+        Type.count()
+
+router.get '/api/types/:id', (request, response)->
+    response.sendPromise ->
+        Type.find request.params.id
+            .then (type)->
+                return type.toJSON()
+
 # Work Routes ##########################################################################
 
 router.get '/api/works', (request, response)->
@@ -55,7 +93,7 @@ router.get '/api/works', (request, response)->
     response.sendPromise ->
         Work.findAll options
             .then (works)->
-                return (c.toJSON() for c in works)
+                return (w.toJSON() for w in works)
 
 router.get '/api/works/count', (request, response)->
     response.sendPromise ->

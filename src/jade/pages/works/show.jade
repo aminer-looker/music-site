@@ -14,5 +14,20 @@ block content
             h1 {{controller.model.title}}
             a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
 
+        .detail
+            ul
+                li(ng-class='controller.instrumentationClass')
+                    span.key instrumentation
+                    span.value {{controller.instrumentation}}
+                li(ng-class='controller.typeClass')
+                    span.key type
+                    span.value {{controller.type}}
+                li(ng-class='controller.composedClass')
+                    span.key composed
+                    span.value {{controller.composed}}
+                li(ng-class='controller.difficultyClass')
+                    span.key difficulty
+                    span.value {{controller.difficulty}}
+
         .error(class='ng-cloak' ng-show='controller.error')
             pre {{controller.error}}

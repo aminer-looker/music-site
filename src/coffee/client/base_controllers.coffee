@@ -24,9 +24,9 @@ exports.BaseController = BaseController = class BaseController
         throw new Error 'subclasses must override refresh'
 
     reportError: (error)->
-        errorText = "#{error?.data?.stack}"
-        errorText ?= "#{error?.data}"
-        errorText ?= "#{error}"
+        errorText = error?.data?.stack
+        errorText ?= error?.data
+        errorText ?= error
         errorText ?= 'unknown error'
 
         console.error "Could not fetch for #{@constructor.name}: #{errorText}"
@@ -54,15 +54,20 @@ exports.DetailController = class DetailController extends BaseController
 
         return id
 
-    refresh: ->
+    refresh: (options={})->
+        options.withRelations ?= []
+
         if not @id? then @id = @getLocationId()
         return unless @id
 
         @Resource.find @id
-            .catch (error)=>
-                @reportError error
             .then (model)=>
                 @model = model
+
+                if options.withRelations.length >0
+                    @Resource.loadRelations model, options.withRelations
+            .catch (error)=>
+                @reportError error
 
 ############################################################################################################
 
