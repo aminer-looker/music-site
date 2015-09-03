@@ -64,7 +64,7 @@ exports.DetailController = class DetailController extends BaseController
             .then (model)=>
                 @model = model
 
-                if options.withRelations.length >0
+                if options.withRelations.length > 0
                     @Resource.loadRelations model, options.withRelations
             .catch (error)=>
                 @reportError error
