@@ -23,4 +23,5 @@ schema.factory 'Instrument', (DS)-> DS.defineResource require '../../model/instr
 schema.factory 'Type',       (DS)-> DS.defineResource require '../../model/types'
 schema.factory 'Work',       (DS)-> DS.defineResource require '../../model/works'
 
-schema.run (Composer, Instrument, Type, Work)-> # force the services to be created
+# force the services to be created so that recursive lookups succeed
+schema.run (Composer, Instrument, Type, Work)-> # do nothing

@@ -10,6 +10,11 @@ module.exports = (grunt)->
     grunt.config.init
 
         rsync:
+            images:
+                options:
+                    src: './src/images/'
+                    dest: './dist/static/images/'
+                    recursive: true
             server_source:
                 options:
                     src: './src/coffee/*'
@@ -64,12 +69,9 @@ module.exports = (grunt)->
             client_source:
                 files: ['./src/coffee/client/**/*.coffee']
                 tasks: ['browserify']
-            server_source:
-                files: ['./src/coffee/server/**/*.coffee']
-                tasks: ['rsync:server_source']
-            shared_source:
-                files: ['./src/coffee/*.coffee', './src/coffee/model/**/*.coffee']
-                tasks: ['rsync:server_source', 'browserify']
+            images:
+                files: ['./src/images/**/*']
+                tasks: ['rsync:images']
             jade_pages:
                 files: ['./src/jade/pages/**/*.jade']
                 tasks: ['jade:pages']
@@ -79,6 +81,12 @@ module.exports = (grunt)->
             sass:
                 files: ['./src/**/*.scss']
                 tasks: ['sass']
+            server_source:
+                files: ['./src/coffee/server/**/*.coffee']
+                tasks: ['rsync:server_source']
+            shared_source:
+                files: ['./src/coffee/*.coffee', './src/coffee/model/**/*.coffee']
+                tasks: ['rsync:server_source', 'browserify']
             test:
                 files: ['./src/**/*.coffee', './test/**/*.coffee']
                 tasks: ['test']

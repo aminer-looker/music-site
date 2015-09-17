@@ -10,7 +10,7 @@ templates            = require '../templates'
 
 ############################################################################################################
 
-work = angular.module 'work', ['schema']
+work = angular.module 'work', ['dialog', 'schema']
 
 # Controllers ##########################################################################
 
@@ -32,16 +32,33 @@ work.controller 'WorkPageController', class WorkPageController extends DetailCon
 
     constructor: ($scope, Work, $location)->
         super $scope, Work, $location
+
         @refresh withRelations:['composer', 'instrument', 'type']
             .then =>
                 $scope.$watch (=> @model), (=> @_updateFields())
                 @_updateFields()
+
+    beginEditing: ->
+        return unless @_dialogController?
+        @_dialogController.visible = true
+
+    endEditing: ->
+        return unless @_dialogController?
+        @_dialogController.visible = false
+
+    clearDialogController: (controller)->
+        @_dialogController = null
+
+    registerDialogController: (controller)->
+        @_dialogController = controller
 
     _updateFields: ->
         @instrumentation = @model?.instrument?.name or 'unknown'
         @type            = @model?.type?.name       or 'unknown'
         @composed        = @model?.composed         or 'unknown'
         @difficulty      = @model?.difficulty       or 'unknown'
+
+        @_dialogController.title = "Edit #{@model.title}" if @_dialogController?
 
         for field in ['instrumentation', 'type', 'composed', 'difficulty']
             @["#{field}Class"] = if @[field] is 'unknown' then 'no-value' else ''

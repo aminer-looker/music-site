@@ -29,9 +29,7 @@ composer.controller 'ComposerPageController', class ComposerPageController exten
 # Directives ###########################################################################
 
 composer.directive 'composerListItem', ->
-    return {
-        restrict: 'C'
-        scope:
-            composer: '='
-        template: templates['composer_list_item']
-    }
+    restrict: 'C'
+    scope:
+        composer: '='
+    template: templates['composer_list_item']
