@@ -15,11 +15,28 @@ dialog = angular.module 'dialog', []
 dialog.controller 'DialogController', class DialogController
 
     constructor: ->
+        @owner = null
         @title = ''
-        @visible = false
+        @_visible = false
 
     close: ->
-        @visible = false
+        if @owner?.canCloseDialog?
+            return unless @owner.canCloseDialog this
+        @_visible = false
+
+    open: ->
+        @_visible = true
+
+    # Property Methods #############################################
+
+    isVisible: ->
+        return @_visible
+
+    setVisible: (visible)->
+        if visible then @open() else @close()
+
+    Object.defineProperties @prototype,
+        visible: { get:@::isVisible, set:@::setVisible }
 
 # Directives ###########################################################################
 
@@ -27,13 +44,15 @@ dialog.directive 'dialog', ($document)->
     controller: 'DialogController'
     controllerAs: 'controller'
     link: ($scope, $el, attrs)->
-        $scope.controller.title = attrs.title
-        $scope.owner.registerDialogController $scope.controller
+        $scope.controller.owner = $scope.owner
+
+        if $scope.owner?.registerDialogController?
+            $scope.owner.registerDialogController $scope.controller
 
         $screen = $el.find('.screen').detach()
         $modalBox = $el.find('.modal-box').detach()
-        $body = $document.find 'body'
 
+        $body = $document.find 'body'
         $body.append $screen
         $body.append $modalBox
     restrict: 'E'

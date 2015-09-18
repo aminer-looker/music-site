@@ -3,10 +3,10 @@
  * All rights reserved.
  */
 
-$dialog-height: 20rem;
-$dialog-width: 40rem;
+$dialog-height: 10rem;
+$dialog-width: 50%;
 $open-position: 50%;
-$closed-position: -$dialog-height;
+$closed-position: -$dialog-height * 1.5;
 $animation-duration: 0.4s;
 
 .screen {
@@ -26,11 +26,12 @@ $animation-duration: 0.4s;
 .modal-box {
     $title-height: 3rem;
 
-    position: fixed; top: $open-position; left: 50%; height: $dialog-height; width: $dialog-width;
+    position: fixed; top: $open-position; left: 50%; min-height: $dialog-height; min-width: $dialog-width;
     transform: translate(-50%, -50%);
 
     background: $color-gray-faint;
     border: 1px solid $color-gray-medium;
+    box-shadow: 3px 10px 40px 5px rgba(0,0,0,0.25);
 
     &.ng-hide {
         top: $closed-position;
@@ -44,7 +45,7 @@ $animation-duration: 0.4s;
         animation: $animation-duration slideDown cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
-    .title {
+    & > .title {
         position: absolute; top: 0; right: 0; left: 0; height: $title-height;
         border-bottom: 1px solid $color-gray-dark;
 
@@ -60,6 +61,21 @@ $animation-duration: 0.4s;
             $diameter: $title-height * 0.6;
 
             position: absolute; top: $padding; right: $padding; height: $diameter; width: $diameter;
+        }
+    }
+
+    & > .content {
+        margin-top: $title-height + 1rem;
+        padding: 1rem;
+
+        .button-bar {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-top: 2rem;
+
+            input {
+                margin-left: 1rem;
+            }
         }
     }
 }

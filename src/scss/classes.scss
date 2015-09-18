@@ -46,3 +46,9 @@
 .disabled {
     opacity: 0.5;
 }
+
+.unknown:after {
+    color: $color-gray-light;
+    content: 'unknown';
+    text-style: italic;
+}

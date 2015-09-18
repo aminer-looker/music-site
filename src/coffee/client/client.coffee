@@ -14,6 +14,7 @@ require 'js-data-angular'
 require './modules/client_schema'
 require './modules/composer'
 require './modules/dialog'
+require './modules/editor'
 require './modules/work'
 
 # Include Angular and its extensions
@@ -22,7 +23,7 @@ require 'angular-animate'
 
 ############################################################################################################
 
-angular.module 'app', ['ngAnimate', 'composer', 'dialog', 'schema', 'work']
+angular.module 'app', ['ngAnimate', 'composer', 'dialog', 'editor', 'schema', 'work']
     .config ($locationProvider)->
         $locationProvider.html5Mode true
 

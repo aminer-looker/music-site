@@ -12,11 +12,17 @@ block content
             ul(ng-show='controller.list')
                 li(class='composer-list-item' composer='composer' ng-repeat='composer in controller.list')
             .button-row
-                button(
+                input(
                     ng-class='controller.hasPrevPage() ? "" : "disabled"'
-                    ng-click="controller.prevPage()") prev
-                button(
+                    ng-click='controller.prevPage()'
+                    type='button'
+                    value='prev'
+                )
+                input(
                     ng-class='controller.hasNextPage() ? "" : "disabled"'
-                    ng-click='controller.nextPage()') next
+                    ng-click='controller.nextPage()'
+                    type='button'
+                    value='next'
+                )
         .error(class='ng-cloak' ng-show='controller.error')
             pre {{controller.error}}

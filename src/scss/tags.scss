@@ -24,8 +24,37 @@ body {
     margin: 3rem 1.5rem;
 }
 
-button {
+input:not([type]), input[type="text"] {
+    font-family: $font-family-user;
+    font-size: $font-size-medium;
+    padding: 0.2rem 0.5rem;
+}
+
+input[type="button"], input[type="submit"] {
+    background: $color-gray-light;
+    border-radius: 0.25rem;
+    border: 1px solid $color-gray-medium;
+    color: $color-gray-dark;
+    font-family: $font-family-control;
+    font-size: $font-size-medium;
+    height: 2rem;
     outline: none;
+    width: 5rem;
+
+    &:active {
+        background: $color-blue-light;
+    }
+
+    &:hover {
+        background: $color-blue-faint;
+    }
+}
+
+input[type="submit"] {
+    border: 1px solid $color-gray-dark;
+    border-radius: 0.25rem;
+    background: $color-gray-medium;
+    color: $color-white;
 }
 
 h1 {

@@ -7,6 +7,22 @@ _ = require '../underscore'
 
 ############################################################################################################
 
+PUBLIC_FIELDS = [
+    'id'
+    'title'
+    'catalog_name'
+    'opus'
+    'opus_num'
+    'composed_year'
+    'difficulty'
+    'key_area'
+    'url'
+    'composer_id'
+    'type_id'
+    'instrument_id'
+    'collection_id'
+]
+
 module.exports =
     name:     'work'
     endpoint: '/api/works'
@@ -17,21 +33,12 @@ module.exports =
         getDetailUrl: ->
             return "/works/#{@id}"
 
+        mergeJSON: (json)->
+            for field, value of json
+                this[field] = value
+
         toJSON: ->
-            return _.pick this,
-                'id'
-                'title'
-                'catalog_name'
-                'opus'
-                'opus_num'
-                'composed_year'
-                'difficulty'
-                'key_area'
-                'url'
-                'composer_id'
-                'type_id'
-                'instrument_id'
-                'collection_id'
+            return _.pick this, PUBLIC_FIELDS
 
     relations:
 

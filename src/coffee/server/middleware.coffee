@@ -3,6 +3,7 @@
 # All rights reserved.
 #
 
+_              = require 'underscore'
 bodyParser     = require 'body-parser'
 constants      = require '../constants'
 clientSessions = require 'client-sessions'
@@ -69,8 +70,12 @@ promisify = (request, response, next)->
                 console.log "#{responseText}"
                 response.send responseText
             .catch (error)->
-                console.error "Request failed with error:\n#{error.stack}"
-                response.status 500
-                response.send message:error.message, stack:error.stack
+                if error.status?
+                    response.status error.status
+                else
+                    console.error "Request failed with error:\n#{error.stack}"
+                    response.status 500
+
+                response.send _.pick error, 'message', 'data', 'stack'
             .done()
     next()

@@ -1,0 +1,36 @@
+/*
+ * Copyright (C) 2015 by Looker Data Services, Inc.
+ * All rights reserved.
+ */
+
+editor {
+    display: flex;
+    flex-direction: column;
+
+    .row {
+        align-items: center;
+        display: flex;
+        margin: 0 auto;
+        margin-bottom: 1rem;
+        width: 66%;
+
+        &.last-child {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: inline-block;
+            flex: 0 0 33%;
+            font-family: $font-family-text;
+            font-size: $font-size-medium;
+        }
+
+        input {
+            display: inline-block;
+            flex: 1 1 66%;
+            border: 1px solid $color-gray-light;
+            font-family: $font-family-user;
+            font-size: $font-size-medium;
+        }
+    }
+}

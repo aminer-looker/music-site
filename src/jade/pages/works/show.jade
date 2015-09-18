@@ -11,23 +11,27 @@ block content
             a(href='/composers/{{controller.model.composer_id}}' target='_self') « back to composer page
 
         .header(class='ng-cloak' ng-show='controller.model.title')
-            h1 {{controller.model.title}}
+            h1 {{controller.editor.title}}
             a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
 
         .detail
             ul
-                li(ng-class='controller.instrumentationClass')
+                li
                     span.key instrumentation
-                    span.value {{controller.instrumentation}}
-                li(ng-class='controller.typeClass')
+                    span.value {{controller.editor.instrumentName}}
+                    span.unknown(ng-hide='controller.editor.instrumentName')
+                li
                     span.key type
-                    span.value {{controller.type}}
-                li(ng-class='controller.composedClass')
+                    span.value {{controller.editor.type}}
+                    span.unknown(ng-hide='controller.editor.type')
+                li(ng-class='controller.composed_yearClass')
                     span.key composed
-                    span.value {{controller.composed}}
+                    span.value {{controller.editor.composedYear}}
+                    span.unknown(ng-hide='controller.editor.composedYear')
                 li(ng-class='controller.difficultyClass')
                     span.key difficulty
-                    span.value {{controller.difficulty}}
+                    span.value {{controller.editor.difficulty}}
+                    span.unknown(ng-hide='controller.editor.difficulty')
 
         .controls
             input(type='button' ng-click='controller.beginEditing()' value='Edit')
@@ -36,3 +40,20 @@ block content
             pre {{controller.error}}
 
         dialog(owner='controller')
+            editor(owner='controller')
+                .row
+                    label instrumentation
+                    input(ng-model='controller.editor.instrumentName')
+                .row
+                    label type
+                    input(ng-model='controller.editor.type')
+                .row
+                    label composed
+                    input(ng-model='controller.editor.composedYear')
+                .row
+                    label difficulty
+                    input(ng-model='controller.editor.difficulty')
+
+            .button-bar
+                input(ng-click='controller.save()' type='submit' value='Save')
+                input(ng-click='controller.cancel()' type='button' value='Cancel')

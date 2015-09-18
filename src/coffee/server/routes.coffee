@@ -5,6 +5,7 @@
 
 constants    = require '../constants'
 express      = require 'express'
+util         = require 'util'
 w            = require 'when'
 {Composer}   = require './server_schema'
 {Instrument} = require './server_schema'
@@ -104,6 +105,16 @@ router.get '/api/works/count', (request, response)->
 router.get '/api/works/:id', (request, response)->
     response.sendPromise ->
         Work.find request.params.id
+            .then (work)->
+                return work.toJSON()
+
+router.put '/api/works/:id', (request, response)->
+    console.log "input: #{JSON.stringify(request.body)}"
+    response.sendPromise ->
+        Work.find request.params.id
+            .then (work)->
+                if not work? then throw status:404, message:"no work with id: #{request.params.id}"
+                Work.update work.id, request.body
             .then (work)->
                 return work.toJSON()
 
