@@ -92,10 +92,14 @@ work.factory 'WorkEditor', ($q, Instrument, Type, Work)->
     class WorkEditor
 
         constructor: (@model)->
-            @_ready = false
+            @isReady = false
+            @instruments = @types = null
 
-            $q.all Instrument.findAll(), Type.findAll()
-                .then => @_ready = true
+            $q.all instruments:Instrument.findAll(), types:Type.findAll()
+                .then (result)=>
+                    @instruments = result.instruments
+                    @types = result.types
+                    @isReady = true
 
         # Public Methods ###########################################
 
@@ -110,45 +114,29 @@ work.factory 'WorkEditor', ($q, Instrument, Type, Work)->
 
         # Property Methods #########################################
 
-        getComposedYear: ->
-            return @model?.composed_year
-
-        setComposedYear: (text)->
-            value = parseInt text
-            value = null if _.isNaN value
-            @model.composed_year = value
-
-        getDifficulty: ->
-            return @model?.difficulty
-
-        setDifficulty: (text)->
-            value = parseFloat text
-            value = null if _.isNaN value
-            value = "#{Math.floor(value * 100) / 100}"
-            @model.difficulty = value
-
-        getInstrumentName: ->
-            return @model?.instrument?.name
-
-        setInstrumentName: (text)->
-            throw new Error 'not supported'
-
-        isReady: ->
-            return @_ready
-
-        getTitle: ->
-            return @model?.title
-
-        getType: ->
-            return @model?.type?.name
-
-        setType: ->
-            throw new Error 'not supported'
-
         Object.defineProperties @prototype,
-            composedYear:   { get:@::getComposedYear, set:@::setComposedYear }
-            difficulty:     { get:@::getDifficulty, set:@::setDifficulty }
-            instrumentName: { get:@::getInstrumentName, set:@::setInstrumentName }
-            ready:          { get:@::isReady }
-            title:          { get:@::getTitle }
-            type:           { get:@::getType, set:@::setType }
+            composedYear:
+                get: -> @model?.composed_year
+                set: (text)->
+                    value = parseInt text
+                    value = null if _.isNaN value
+                    @model.composed_year = value
+            difficulty:
+                get: -> @model?.difficulty
+                set: (text)->
+                    value = parseFloat text
+                    value = null if _.isNaN value
+                    value = "#{Math.floor(value * 100) / 100}"
+                    @model.difficulty = value
+            instrumentId:
+                get: -> @model?.instrument?.id
+                set: (id)-> @model.instrument_id = id
+            instrumentName:
+                get: -> @model?.instrument?.name
+            title:
+                get: -> @model?.title
+            typeName:
+                get: -> @model?.type?.name
+            typeId:
+                get: -> @model?.type?.id
+                set: (id)-> @model.type_id = id

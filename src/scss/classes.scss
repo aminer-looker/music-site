@@ -7,7 +7,7 @@
     display: flex;
     padding-top: 1.5rem;
 
-    button {
+    input[type="button"] {
         background: $color-gray-faint;
         border: 1px solid $color-gray-light;
         border-right: none;

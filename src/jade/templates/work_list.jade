@@ -8,9 +8,15 @@ ul(ng-show='controller.list')
         a(class='ng-cloak' href='{{work.getDetailUrl()}}' target='_self') {{work.title}}
 
     .button-row
-        button(
+        input(
             ng-class='controller.hasPrevPage() ? "" : "disabled"'
-            ng-click="controller.prevPage()") prev
-        button(
+            ng-click="controller.prevPage()"
+            type='button'
+            value='prev'
+        )
+        input(
             ng-class='controller.hasNextPage() ? "" : "disabled"'
-            ng-click='controller.nextPage()') next
+            ng-click='controller.nextPage()'
+            type='button'
+            value='next'
+        )

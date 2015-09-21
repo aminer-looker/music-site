@@ -6,6 +6,8 @@
 if typeof(global) is 'undefined'
     window.global = window
 
+global.inspect = require('util').inspect
+
 # Load JSData libraries. The core library must be first.
 require 'js-data'
 require 'js-data-angular'

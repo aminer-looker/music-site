@@ -22,13 +22,13 @@ block content
                     span.unknown(ng-hide='controller.editor.instrumentName')
                 li
                     span.key type
-                    span.value {{controller.editor.type}}
-                    span.unknown(ng-hide='controller.editor.type')
-                li(ng-class='controller.composed_yearClass')
+                    span.value {{controller.editor.typeName}}
+                    span.unknown(ng-hide='controller.editor.typeName')
+                li
                     span.key composed
                     span.value {{controller.editor.composedYear}}
                     span.unknown(ng-hide='controller.editor.composedYear')
-                li(ng-class='controller.difficultyClass')
+                li
                     span.key difficulty
                     span.value {{controller.editor.difficulty}}
                     span.unknown(ng-hide='controller.editor.difficulty')
@@ -43,10 +43,16 @@ block content
             editor(owner='controller')
                 .row
                     label instrumentation
-                    input(ng-model='controller.editor.instrumentName')
+                    select(
+                        ng-model='controller.editor.instrumentId'
+                        ng-options='i.id as i.name for i in controller.editor.instruments'
+                    )
                 .row
                     label type
-                    input(ng-model='controller.editor.type')
+                    select(
+                        ng-model='controller.editor.typeId'
+                        ng-options='t.id as t.name for t in controller.editor.types'
+                    )
                 .row
                     label composed
                     input(ng-model='controller.editor.composedYear')
