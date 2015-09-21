@@ -52,8 +52,12 @@ $animation-duration: 0.4s;
         p {
             position: absolute; top: 50%; left: 1rem; width: calc(100% - 2rem);
             transform: translateY(-40%);
+
             font-family: $font-family-text;
             font-size: $font-size-large;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         img {

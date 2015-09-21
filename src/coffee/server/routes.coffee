@@ -7,6 +7,7 @@ constants    = require '../constants'
 express      = require 'express'
 util         = require 'util'
 w            = require 'when'
+_            = require '../underscore'
 {Composer}   = require './server_schema'
 {Instrument} = require './server_schema'
 {Type}       = require './server_schema'
@@ -89,7 +90,7 @@ router.get '/api/works', (request, response)->
     composer_id = parseInt(request.query.composer_id)
 
     options = orderBy: ['title'], offset:offset, limit:limit
-    options.composer_id = composer_id if composer_id?
+    options.composer_id = composer_id unless _.isNaN composer_id
 
     response.sendPromise ->
         Work.findAll options
@@ -109,7 +110,6 @@ router.get '/api/works/:id', (request, response)->
                 return work.toJSON()
 
 router.put '/api/works/:id', (request, response)->
-    console.log "input: #{JSON.stringify(request.body)}"
     response.sendPromise ->
         Work.find request.params.id
             .then (work)->
