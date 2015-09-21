@@ -7,11 +7,6 @@ JSData is a library which provides a flexible model layer for either client or s
 
 [Watch a 30min presentation by the creator of JSData](https://www.youtube.com/watch?v=8wxnnJA9FKw)
 
-
-### What is in this project?
-
-
-
 ### Gotchas
 
 A big part of this project was to gain some practical experience and run into all the little issues you have when trying to set something up for the first time, and to make sure that JS-Data can be incorporated into a real system without any awful code required to make it work.  In the process of doing so, here's a list of surprises I ran into:
