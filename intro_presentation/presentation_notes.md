@@ -25,6 +25,23 @@
     3. base controllers (base_controllers.coffee / composer.coffee)
     4. editing models (editor.coffee / work.coffee)
 
+# Pros & Cons
+
+* Pros:
+    1. There is only one instance of each model object.
+    2. There is a simple, unified way to get model instances (including relations).
+    3. Business logic, validations, and computed fields can easily be attached to models.
+    4. JSData comes with robust support for Angular environments.
+* Cons:
+    1. The built-in HTTP adapter has baked-in assumptions about how endpoints work. We may need to change some of our endpoints to accomodate this or work around the HTTP adapter.
+    2. The "one instance per model" paradigm makes our current dialog behavior awkward to implement exactly (though a robust alternative is available).
+
 # Questions
 
 1. Do you need to save each model individually, or do parents save children automatically?
+
+    When saving a graph of models, each model must be saved individually.
+
+2. Can you make a copy of a model which isn't the one canonical instance?
+
+    You can copy individual fields out of a model into a new object, but JSData is specifically designed to not allow multiple copies of a model to exist.
