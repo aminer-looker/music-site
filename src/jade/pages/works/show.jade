@@ -18,20 +18,20 @@ block content
             ul
                 li
                     span.key instrumentation
-                    span.value {{controller.editor.instrumentName}}
-                    span.unknown(ng-hide='controller.editor.instrumentName')
+                    span.value {{controller.viewModel.instrumentName}}
+                    span.unknown(ng-hide='controller.viewModel.instrumentName')
                 li
                     span.key type
-                    span.value {{controller.editor.typeName}}
-                    span.unknown(ng-hide='controller.editor.typeName')
+                    span.value {{controller.viewModel.typeName}}
+                    span.unknown(ng-hide='controller.viewModel.typeName')
                 li
                     span.key composed
-                    span.value {{controller.editor.composedYear}}
-                    span.unknown(ng-hide='controller.editor.composedYear')
+                    span.value {{controller.viewModel.composedYear}}
+                    span.unknown(ng-hide='controller.viewModel.composedYear')
                 li
                     span.key difficulty
-                    span.value {{controller.editor.difficulty}}
-                    span.unknown(ng-hide='controller.editor.difficulty')
+                    span.value {{controller.viewModel.difficulty}}
+                    span.unknown(ng-hide='controller.viewModel.difficulty')
 
         .controls
             input(type='button' ng-click='controller.beginEditing()' value='Edit')

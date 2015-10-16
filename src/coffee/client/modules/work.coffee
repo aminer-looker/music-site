@@ -37,6 +37,7 @@ work.controller 'WorkPageController', class WorkPageController extends DetailCon
 
         @refresh withRelations:['composer', 'instrument', 'type']
             .then =>
+                @viewModel = new WorkEditor @model
                 @editor = new WorkEditor @model
 
     beginEditing: ->
@@ -94,6 +95,7 @@ work.factory 'WorkEditor', ($q, Instrument, Type, Work)->
         constructor: (@model)->
             @isReady = false
             @instruments = @types = null
+            @data = {}
 
             $q.all instruments:Instrument.findAll(), types:Type.findAll()
                 .then (result)=>
@@ -104,11 +106,11 @@ work.factory 'WorkEditor', ($q, Instrument, Type, Work)->
         # Public Methods ###########################################
 
         cancel: ->
-            $q.when(true).then =>
-                @model.DSRevert()
-                return @model
+            $q.when(@model)
 
         save: ->
+            _.extend @model, @data
+
             @model.DSSave().then =>
                 return @model
 
@@ -116,21 +118,21 @@ work.factory 'WorkEditor', ($q, Instrument, Type, Work)->
 
         Object.defineProperties @prototype,
             composedYear:
-                get: -> @model?.composed_year
+                get: -> @data.composed_year ?= @model?.composed_year
                 set: (text)->
                     value = parseInt text
                     value = null if _.isNaN value
-                    @model.composed_year = value
+                    @data.composed_year = value
             difficulty:
-                get: -> @model?.difficulty
+                get: -> @data.difficulty ?= @model?.difficulty
                 set: (text)->
                     value = parseFloat text
                     value = null if _.isNaN value
                     value = "#{Math.floor(value * 100) / 100}"
-                    @model.difficulty = value
+                    @data.difficulty = value
             instrumentId:
-                get: -> @model?.instrument?.id
-                set: (id)-> @model.instrument_id = id
+                get: -> @data.instrument_id ?= @model?.instrument?.id
+                set: (id)-> @data.instrument_id = id
             instrumentName:
                 get: -> @model?.instrument?.name
             title:
@@ -138,5 +140,5 @@ work.factory 'WorkEditor', ($q, Instrument, Type, Work)->
             typeName:
                 get: -> @model?.type?.name
             typeId:
-                get: -> @model?.type?.id
-                set: (id)-> @model.type_id = id
+                get: -> @data.type_id ?= @model?.type?.id
+                set: (id)-> @data.type_id = id
