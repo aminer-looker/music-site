@@ -1,0 +1,107 @@
+/*
+ * Copyright (C) 2015 by Looker Data Services, Inc.
+ * All rights reserved.
+ */
+
+$dialog-height: 10rem;
+$dialog-width: 50%;
+$open-position: 50%;
+$closed-position: -$dialog-height * 1.5;
+$animation-duration: 0.4s;
+
+.screen {
+    position: fixed; top: 0; left: 0; height: 100%; width: 100%;
+
+    background: $color-white-screen;
+
+    &.ng-hide-add {
+        animation: $animation-duration fadeOut linear;
+    }
+
+    &.ng-hide-remove {
+        animation: $animation-duration fadeIn linear;
+    }
+}
+
+.modal-box {
+    $title-height: 3rem;
+
+    position: fixed; top: $open-position; left: 50%; min-height: $dialog-height; min-width: $dialog-width;
+    transform: translate(-50%, -50%);
+
+    background: $color-gray-faint;
+    border: 1px solid $color-gray-medium;
+    box-shadow: 3px 10px 40px 5px rgba(0,0,0,0.25);
+
+    &.ng-hide {
+        top: $closed-position;
+    }
+
+    &.ng-hide-add {
+        animation: $animation-duration slideUp cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    }
+
+    &.ng-hide-remove {
+        animation: $animation-duration slideDown cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    & > .title {
+        position: absolute; top: 0; right: 0; left: 0; height: $title-height;
+        border-bottom: 1px solid $color-gray-dark;
+
+        p {
+            position: absolute; top: 50%; left: 1rem; width: calc(100% - 2rem);
+            transform: translateY(-40%);
+
+            font-family: $font-family-text;
+            font-size: $font-size-large;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        img {
+            $padding: $title-height * 0.2;
+            $diameter: $title-height * 0.6;
+
+            position: absolute; top: $padding; right: $padding; height: $diameter; width: $diameter;
+        }
+    }
+
+    & > .content {
+        margin-top: $title-height + 1rem;
+        padding: 1rem;
+
+        .button-bar {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-top: 2rem;
+
+            input {
+                margin-left: 1rem;
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0.0; }
+    50% { opacity: 1.0; }
+    100% { opacity: 1.0; }
+}
+
+@keyframes fadeOut {
+    0% { opacity: 1.0; }
+    50% { opacity: 1.0; }
+    100% { opacity: 0.0; }
+}
+
+@keyframes slideUp {
+    0% { top: $open-position; }
+    100% { top: $closed-position; }
+}
+
+@keyframes slideDown {
+    0% { top: $closed-position; }
+    100% { top: $open-position; }
+}

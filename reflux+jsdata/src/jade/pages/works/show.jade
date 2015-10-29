@@ -1,0 +1,65 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+extends ../../layouts/basic
+
+block content
+    #work-show(ng-controller='WorkPageController as controller')
+        .navigation(ng-show='controller.model.composer_id')
+            a(href='/composers/{{controller.model.composer_id}}' target='_self') « back to composer page
+
+        .header(class='ng-cloak' ng-show='controller.model.title')
+            h1 {{controller.editor.title}}
+            a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
+
+        .detail
+            ul
+                li
+                    span.key instrumentation
+                    span.value {{controller.viewModel.instrumentName}}
+                    span.unknown(ng-hide='controller.viewModel.instrumentName')
+                li
+                    span.key type
+                    span.value {{controller.viewModel.typeName}}
+                    span.unknown(ng-hide='controller.viewModel.typeName')
+                li
+                    span.key composed
+                    span.value {{controller.viewModel.composedYear}}
+                    span.unknown(ng-hide='controller.viewModel.composedYear')
+                li
+                    span.key difficulty
+                    span.value {{controller.viewModel.difficulty}}
+                    span.unknown(ng-hide='controller.viewModel.difficulty')
+
+        .controls
+            input(type='button' ng-click='controller.beginEditing()' value='Edit')
+
+        .error(class='ng-cloak' ng-show='controller.error')
+            pre {{controller.error}}
+
+        dialog(owner='controller')
+            editor(owner='controller')
+                .row
+                    label instrumentation
+                    select(
+                        ng-model='controller.editor.instrumentId'
+                        ng-options='i.id as i.name for i in controller.editor.instruments'
+                    )
+                .row
+                    label type
+                    select(
+                        ng-model='controller.editor.typeId'
+                        ng-options='t.id as t.name for t in controller.editor.types'
+                    )
+                .row
+                    label composed
+                    input(ng-model='controller.editor.composedYear')
+                .row
+                    label difficulty
+                    input(ng-model='controller.editor.difficulty')
+
+            .button-bar
+                input(ng-click='controller.save()' type='submit' value='Save')
+                input(ng-click='controller.cancel()' type='button' value='Cancel')

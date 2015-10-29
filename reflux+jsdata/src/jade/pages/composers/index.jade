@@ -1,0 +1,28 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+extends ../../layouts/basic
+
+block content
+    #composers-index(ng-controller='ComposerListController as controller')
+        h1 Pick a composer to explore.
+        .composer-list
+            ul(ng-show='controller.list')
+                li(class='composer-list-item' composer='composer' ng-repeat='composer in controller.list')
+            .button-row
+                input(
+                    ng-class='controller.hasPrevPage() ? "" : "disabled"'
+                    ng-click='controller.prevPage()'
+                    type='button'
+                    value='prev'
+                )
+                input(
+                    ng-class='controller.hasNextPage() ? "" : "disabled"'
+                    ng-click='controller.nextPage()'
+                    type='button'
+                    value='next'
+                )
+        .error(class='ng-cloak' ng-show='controller.error')
+            pre {{controller.error}}

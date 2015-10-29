@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mysql -u root <<SQL
+create user 'music-site-app'@'localhost' identified by '9q{o3bBt7M11';
+grant select, insert, update, delete on music.* to 'music-site-app'@'localhost';
+SQL

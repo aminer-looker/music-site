@@ -1,0 +1,60 @@
+/*
+ * Copyright (C) 2015 by Looker Data Services, Inc.
+ * All rights reserved.
+ */
+
+#work-show {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 66%;
+
+    .navigation {
+        position: fixed; top: 1rem; left: 1rem;
+
+        font-family: $font-family-control;
+        font-size: $font-size-small;
+    }
+
+    .header {
+        margin-bottom: 2rem;
+
+        h1 {
+            margin-bottom: 0;
+        }
+
+        a {
+            font-family: $font-family-control;
+            font-size: $font-size-small;
+        }
+    }
+
+    .detail {
+        font-family: $font-family-text;
+        font-size: $font-size-medium;
+
+        li {
+            margin-top: 1rem;
+
+            &:first-child {
+                margin-top: 0;
+            }
+
+            &.no-value {
+                .value {
+                    color: $color-gray-light;
+                }
+            }
+
+            .key {
+                display: inline-block;
+                font-style: italic;
+                width: 10rem;
+            }
+        }
+    }
+
+    .controls {
+        margin-top: 2rem;
+    }
+}

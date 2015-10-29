@@ -1,0 +1,12 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+.screen(ng-click='controller.close()' ng-show='controller.visible')
+
+.modal-box(ng-show='controller.visible')
+    .title
+        p {{controller.title}}
+        img(ng-click='controller.close()' src='/images/close-button.png')
+    .content(ng-transclude)

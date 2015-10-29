@@ -1,0 +1,23 @@
+/*
+ * Copyright (C) 2015 by Looker Data Services, Inc.
+ * All rights reserved.
+ */
+
+#composers-index {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 66%;
+
+    .composer-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        ul {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+}
