@@ -1,5 +1,14 @@
+
+
 A simple site to test the use of [JSData](www.js-data.io/), [Angular](angularjs.org/), [Node](nodejs.org) together as a full-stack solution.
 
+### Getting started
+
+1. `npm install`
+1. `npm install -g grunt-cli`
+1. `npm install -g nodemon`
+1. `./script/create-user` # Assumes you have a local mysql instance running. If you don't, `brew install mysql`
+1. Load some data into the database (prolly need to ask @aminer-looker for this).
 
 ### What is JS-Data?
 
