@@ -6,15 +6,15 @@
 extends ../../layouts/basic
 
 block content
-    #composer-show(ng-controller='ComposerPageController as controller')
+    #composer-show(ng-controller='ComposerModelController as controller')
         .navigation
             a(href='/composers/' target='_self') « back to composer list
 
-        .header(class='ng-cloak' ng-show='controller.model.full_name')
-            h1 {{controller.model.full_name}}
-            a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
+        .header(class='ng-cloak' ng-show='composer.full_name')
+            h1 {{composer.full_name}}
+            a(href='http://classicalmusicdb.com{{composer.url}}') see on ClassicalMusic DB
 
-        work-list(composer_id='{{controller.model.id}}')
+        work-list
 
-        .error(class='ng-cloak' ng-show='controller.error')
-            pre {{controller.error}}
+        .error(class='ng-cloak' ng-show='error')
+            pre {{error}}

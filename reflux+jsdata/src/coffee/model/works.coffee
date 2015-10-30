@@ -43,6 +43,11 @@ module.exports =
         toJSON: ->
             return _.pick this, PUBLIC_FIELDS
 
+        toView: ->
+            view = @toJSON()
+            view.detail_url = @getDetailUrl()
+            return view
+
     relations:
 
         belongsTo:

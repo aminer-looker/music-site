@@ -23,7 +23,7 @@ pageModule.factory 'Page', ->
             return @_pageNumber > 0
 
         hasNextPage: ->
-            return @_pageNumber < @_totalPages
+            return @_pageNumber + 1 < @_totalPages
 
         # Property Methods #############################################################
 

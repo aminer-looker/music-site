@@ -16,24 +16,23 @@ module = angular.module 'composer', ['page', 'reflux', 'schema']
 
 # Actions ##################################################################################################
 
-module.factory 'ComposerModelActions', (reflux)->
-    reflux.createActions
-        'load':
-            children: ['success', 'error']
-
-module.factory 'ComposerPageActions', (reflux)->
+module.factory 'ComposerListActions', (reflux)->
     reflux.createActions
         loadPage: { children: ['success', 'error'] }
         nextPage: {}
         prevPage: {}
 
-module.factory 'ComposerActions', (ComposerModelActions, ComposerPageActions)->
-    _.extend {}, ComposerModelActions, ComposerPageActions
+module.factory 'ComposerModelActions', (reflux)->
+    reflux.createActions
+        load: { children: ['success', 'error'] }
+
+module.factory 'ComposerActions', (ComposerListActions, ComposerModelActions)->
+    _.extend {}, ComposerModelActions, ComposerListActions
 
 # Controllers ##############################################################################################
 
-module.controller 'ComposerListController', ($scope, $timeout, ComposerActions, ComposerPageStore)->
-    ComposerPageStore.listen (event, pageNumber, data)->
+module.controller 'ComposerListController', ($scope, $timeout, ComposerActions, ComposerListStore)->
+    ComposerListStore.listen (event, pageNumber, data)->
         $scope.$apply ->
             if event is EVENT.CHANGE
                 $scope.composerPage = data
@@ -49,6 +48,28 @@ module.controller 'ComposerListController', ($scope, $timeout, ComposerActions, 
 
     ComposerActions.loadPage()
 
+module.controller 'ComposerModelController', (
+    $location, $scope, $timeout, ComposerActions, ComposerModelStore
+)->
+    ComposerModelStore.listen (event, id, data)->
+        $scope.$apply ->
+            if event is EVENT.CHANGE
+                $scope.composer = data
+            else if event is EVENT.ERROR
+                $scope.error = data
+                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+
+    readLocationForId = ->
+        match = /.*\/(.*)$/.exec $location.path()
+        return null unless match?
+
+        id = parseInt match[1]
+        return null unless _.isNumber id
+
+        return id
+
+    ComposerActions.load readLocationForId()
+
 # Directives ###############################################################################################
 
 module.directive 'composerListItem', ->
@@ -59,28 +80,11 @@ module.directive 'composerListItem', ->
 
 # Stores ###################################################################################################
 
-module.factory 'ComposerStore', (Composer, ComposerModelActions, reflux)->
-    reflux.createStore
-        init: ->
-            @_composer = null
-            @listenToMany ComposerModelActions
-
-        get: ->
-            return @_composer
-
-        onLoad: (id)->
-            Composer.find id
-                .then (composer)=>
-                    @_composer = composer.toJSON()
-                    @trigger EVENT.CHANGE, id, @_composer
-                .catch (error)->
-                    @trigger EVENT.ERROR, id, error
-
-module.factory 'ComposerPageStore', ($q, Composer, ComposerPageActions, Page, reflux)->
+module.factory 'ComposerListStore', ($q, Composer, ComposerListActions, Page, reflux)->
     reflux.createStore
         init: ->
             @_page = null
-            @listenToMany ComposerPageActions
+            @listenToMany ComposerListActions
 
         get: ->
             return @_page
@@ -99,11 +103,11 @@ module.factory 'ComposerPageStore', ($q, Composer, ComposerPageActions, Page, re
                     limit  = PAGE_SIZE
                     Composer.findAll offset:offset, limit:limit
                 .then (composers)->
-                    list = (c.toJSON() for c in composers)
+                    list = (c.toView() for c in composers)
                     totalPages = Math.ceil total / PAGE_SIZE
-                    ComposerPageActions.loadPage.success pageNumber, totalPages, list
+                    ComposerListActions.loadPage.success pageNumber, totalPages, list
                 .catch (error)->
-                    ComposerPageActions.loadPage.error pageNumber, error
+                    ComposerListActions.loadPage.error pageNumber, error
 
         onLoadPageError: (pageNumber, error)->
             @trigger EVENT.ERROR, pageNumber, error
@@ -119,7 +123,7 @@ module.factory 'ComposerPageStore', ($q, Composer, ComposerPageActions, Page, re
             else
                 pageNumber = 0
 
-            ComposerPageActions.loadPage pageNumber
+            ComposerListActions.loadPage pageNumber
 
         onPrevPage: ->
             if @_page?
@@ -128,4 +132,27 @@ module.factory 'ComposerPageStore', ($q, Composer, ComposerPageActions, Page, re
             else
                 pageNumber = 0
 
-            ComposerPageActions.loadPage pageNumber
+            ComposerListActions.loadPage pageNumber
+
+module.factory 'ComposerModelStore', (Composer, ComposerModelActions, reflux)->
+    reflux.createStore
+        init: ->
+            @_composer = null
+            @listenToMany ComposerModelActions
+
+        get: ->
+            return @_composer
+
+        onLoad: (id)->
+            Composer.find id
+                .then (composer)=>
+                    ComposerModelActions.load.success id, composer.toView()
+                .catch (error)->
+                    ComposerModelActions.load.error id, error
+
+        onLoadSuccess: (id, composer)->
+            @_composer = composer
+            @trigger EVENT.CHANGE, id, composer
+
+        onLoadError: (id, error)->
+            @trigger EVENT.ERROR, id, error

@@ -7,6 +7,12 @@ _ = require '../underscore'
 
 ############################################################################################################
 
+PUBLIC_FIELDS = [
+    'id', 'first_name', 'last_name', 'url'
+]
+
+############################################################################################################
+
 module.exports =
 
     name:     'composer'
@@ -25,4 +31,10 @@ module.exports =
             return "/composers/#{@id}"
 
         toJSON: ->
-            return _.pick this, 'id', 'first_name', 'last_name', 'url'
+            return _.pick this, PUBLIC_FIELDS
+
+        toView: ->
+            view = @toJSON()
+            view.full_name = @full_name
+            view.detail_url = @getDetailUrl()
+            return view
