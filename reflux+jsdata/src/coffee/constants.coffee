@@ -4,13 +4,9 @@
 #
 
 module.exports =
+    ERROR_DISPLAY_TIME: 5000
     STATIC_BASE: './static'
     PAGE_CACHE_SIZE: 100
     PAGE_SIZE: 20
     EVENT:
-        change:
-            count:     'change:count'
-            model:     'change:model'
-            page:      'change:page'
-            selection: 'change:selection'
-        error:         'error'
+        CHANGE: 'change'

@@ -12,7 +12,7 @@ global.inspect = require('util').inspect
 require 'js-data'
 require 'js-data-angular'
 
-# Load our Reflux integration module
+# Include the Reflux module
 require './modules/reflux'
 
 # Include all our modules so they can register with Angular
@@ -20,6 +20,7 @@ require './modules/client_schema'
 require './modules/composer'
 require './modules/dialog'
 require './modules/editor'
+require './modules/page'
 require './modules/work'
 
 # Include Angular and its extensions
