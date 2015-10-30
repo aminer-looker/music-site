@@ -6,37 +6,37 @@
 extends ../../layouts/basic
 
 block content
-    #work-show(ng-controller='WorkPageController as controller')
-        .navigation(ng-show='controller.model.composer_id')
-            a(href='/composers/{{controller.model.composer_id}}' target='_self') « back to composer page
+    #work-show(ng-controller='WorkModelController as controller')
+        .navigation(ng-show='work.composer.id')
+            a(href='/composers/{{work.composer.id}}' target='_self') « back to composer page
 
-        .header(class='ng-cloak' ng-show='controller.model.title')
-            h1 {{controller.editor.title}}
-            a(href='http://classicalmusicdb.com{{controller.model.url}}') see on ClassicalMusic DB
+        .header(class='ng-cloak' ng-show='work.title')
+            h1 {{work.title}}
+            a(href='http://classicalmusicdb.com{{work.url}}') see on ClassicalMusic DB
 
         .detail
             ul
                 li
                     span.key instrumentation
-                    span.value {{controller.viewModel.instrumentName}}
-                    span.unknown(ng-hide='controller.viewModel.instrumentName')
+                    span.value {{work.instrument.name}}
+                    span.unknown(ng-hide='work.instrument.name')
                 li
                     span.key type
-                    span.value {{controller.viewModel.typeName}}
-                    span.unknown(ng-hide='controller.viewModel.typeName')
+                    span.value {{work.type.name}}
+                    span.unknown(ng-hide='work.type.name')
                 li
                     span.key composed
-                    span.value {{controller.viewModel.composedYear}}
-                    span.unknown(ng-hide='controller.viewModel.composedYear')
+                    span.value {{work.composedYear}}
+                    span.unknown(ng-hide='work.composedYear')
                 li
                     span.key difficulty
-                    span.value {{controller.viewModel.difficulty}}
-                    span.unknown(ng-hide='controller.viewModel.difficulty')
+                    span.value {{work.difficulty}}
+                    span.unknown(ng-hide='work.difficulty')
 
         .controls
             input(type='button' ng-click='controller.beginEditing()' value='Edit')
 
-        .error(class='ng-cloak' ng-show='controller.error')
+        .error(class='ng-cloak' ng-show='error')
             pre {{controller.error}}
 
         dialog(owner='controller')

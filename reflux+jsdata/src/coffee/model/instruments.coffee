@@ -16,3 +16,6 @@ module.exports =
 
         toJSON: ->
             return _.pick this, 'id', 'name'
+
+        toView: ->
+            return @toJSON()

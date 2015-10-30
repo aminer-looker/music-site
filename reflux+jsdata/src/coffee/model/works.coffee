@@ -43,9 +43,21 @@ module.exports =
         toJSON: ->
             return _.pick this, PUBLIC_FIELDS
 
-        toView: ->
+        toView: (options={})->
+            options.relations ?= []
+
             view = @toJSON()
             view.detail_url = @getDetailUrl()
+
+            if 'composer' in options.relations and @composer?
+                view.composer = @composer.toView()
+
+            if 'instrument' in options.relations and @instrument?
+                view.instrument = @instrument.toView()
+
+            if 'type' in options.relations and @type?
+                view.type = @type.toView()
+
             return view
 
     relations:

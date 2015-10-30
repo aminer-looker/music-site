@@ -23,8 +23,12 @@ module.factory 'WorkListActions', (reflux)->
         nextPage: {}
         prevPage: {}
 
-module.factory 'WorkActions', (WorkListActions)->
-    _.extend {}, WorkListActions
+module.factory 'WorkModelActions', (reflux)->
+    reflux.createActions
+        load: { children: ['success', 'error'] }
+
+module.factory 'WorkActions', (WorkListActions, WorkModelActions)->
+    _.extend {}, WorkListActions, WorkModelActions
 
 # Controllers ##############################################################################################
 
@@ -42,6 +46,26 @@ module.controller 'WorkListController', ($scope, $timeout, WorkListStore, WorkAc
 
     $scope.prevPage = ->
         WorkActions.prevPage()
+
+module.controller 'WorkModelController', ($location, $scope, $timeout, WorkModelStore, WorkActions)->
+    WorkModelStore.listen (event, id, data)->
+        $scope.$apply ->
+            if event is EVENT.CHANGE
+                $scope.work = data
+            else if event is EVENT.ERROR
+                $scope.error = data
+                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+
+    readLocationForId = ->
+        match = /.*\/(.*)$/.exec $location.path()
+        return null unless match?
+
+        id = parseInt match[1]
+        return null unless _.isNumber id
+
+        return id
+
+    WorkActions.load readLocationForId()
 
 # Directives ###############################################################################################
 
@@ -115,3 +139,30 @@ module.factory 'WorkListStore', ($q, ComposerModelStore, Page, reflux, Work, Wor
                 pageNumber = 0
 
             WorkListActions.loadPage pageNumber
+
+module.factory 'WorkModelStore', (Work, WorkModelActions, reflux)->
+    reflux.createStore
+        init: ->
+            @_work = null
+            @listenToMany WorkModelActions
+
+        get: ->
+            return @_work
+
+        onLoad: (id)->
+            relations = ['composer', 'instrument', 'type']
+
+            Work.find id
+                .then (work)->
+                    Work.loadRelations work, relations
+                .then (work)->
+                    WorkModelActions.load.success id, work.toView relations:relations
+                .catch (error)->
+                    WorkModelActions.load.error id, error
+
+        onLoadSuccess: (id, work)->
+            @_work = work
+            @trigger EVENT.CHANGE, id, work
+
+        onLoadError: (id, error)->
+            @trigger EVENT.ERROR, id, error
