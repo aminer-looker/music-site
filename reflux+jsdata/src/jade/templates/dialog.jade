@@ -3,10 +3,10 @@
 //- All rights reserved.
 //-
 
-.screen(ng-click='controller.close()' ng-show='controller.visible')
+.screen(ng-click='close()' ng-show='visible')
 
-.modal-box(ng-show='controller.visible')
+.modal-box(ng-show='visible')
     .title
-        p {{controller.title}}
-        img(ng-click='controller.close()' src='/images/close-button.png')
+        p {{title}}
+        img(ng-click='close()' src='/images/close-button.png')
     .content(ng-transclude)

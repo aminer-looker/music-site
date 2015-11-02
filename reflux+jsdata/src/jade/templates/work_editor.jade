@@ -1,0 +1,28 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+.row
+    label instrumentation
+    select(
+        ng-model='work.instrument_id'
+        ng-options='i.id as i.name for i in instruments'
+    )
+.row
+    label type
+    select(
+        ng-model='work.type_id'
+        ng-options='t.id as t.name for t in types'
+    )
+.row
+    label composed
+    input(ng-model='work.composed_year')
+.row
+    label difficulty
+    input(ng-model='work.difficulty')
+
+.button-bar
+    input(ng-click='save()' type='submit' value='Save')
+    input(ng-click='cancel()' type='button' value='Cancel')
+

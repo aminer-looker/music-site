@@ -26,40 +26,18 @@ block content
                     span.unknown(ng-hide='work.type.name')
                 li
                     span.key composed
-                    span.value {{work.composedYear}}
-                    span.unknown(ng-hide='work.composedYear')
+                    span.value {{work.composed_year}}
+                    span.unknown(ng-hide='work.composed_year')
                 li
                     span.key difficulty
                     span.value {{work.difficulty}}
                     span.unknown(ng-hide='work.difficulty')
 
         .controls
-            input(type='button' ng-click='controller.beginEditing()' value='Edit')
+            input(type='button' ng-click='beginEditing()' value='Edit')
 
         .error(class='ng-cloak' ng-show='error')
             pre {{controller.error}}
 
-        dialog(owner='controller')
-            editor(owner='controller')
-                .row
-                    label instrumentation
-                    select(
-                        ng-model='controller.editor.instrumentId'
-                        ng-options='i.id as i.name for i in controller.editor.instruments'
-                    )
-                .row
-                    label type
-                    select(
-                        ng-model='controller.editor.typeId'
-                        ng-options='t.id as t.name for t in controller.editor.types'
-                    )
-                .row
-                    label composed
-                    input(ng-model='controller.editor.composedYear')
-                .row
-                    label difficulty
-                    input(ng-model='controller.editor.difficulty')
-
-            .button-bar
-                input(ng-click='controller.save()' type='submit' value='Save')
-                input(ng-click='controller.cancel()' type='button' value='Cancel')
+        dialog(name='{{dialogName}}', state='closed', title='{{dialogTitle}}')
+            work-editor(id='work.id')

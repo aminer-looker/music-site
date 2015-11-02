@@ -9,4 +9,11 @@ module.exports =
     PAGE_CACHE_SIZE: 100
     PAGE_SIZE: 20
     EVENT:
+        CANCEL: 'cancel'
         CHANGE: 'change'
+        DONE:   'done'
+        ERROR:  'error'
+        SAVE:   'save'
+    DIALOG_STATE:
+        OPEN: 'open'
+        CLOSED: 'closed'

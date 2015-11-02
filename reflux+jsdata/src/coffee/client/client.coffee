@@ -20,16 +20,31 @@ require './modules/client_schema'
 require './modules/composer'
 require './modules/dialog'
 require './modules/editor'
+require './modules/instrument'
 require './modules/page'
+require './modules/type'
 require './modules/work'
 
 # Include Angular and its extensions
 angular = require 'angular'
 require 'angular-animate'
 
+MODULES = [
+    'composer'
+    'dialog'
+    'editor'
+    'instrument'
+    'ngAnimate'
+    'page'
+    'reflux'
+    'schema'
+    'type'
+    'work'
+]
+
 ############################################################################################################
 
-angular.module 'app', ['ngAnimate', 'composer', 'dialog', 'editor', 'reflux', 'schema', 'work']
+angular.module 'app', MODULES
     .config ($locationProvider)->
         $locationProvider.html5Mode true
 

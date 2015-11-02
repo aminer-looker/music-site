@@ -29,16 +29,15 @@ module.exports =
     table:    'works'
 
     computed:
+        detail_url: -> "/works/#{@id}"
         public_fields: -> PUBLIC_FIELDS
 
     methods:
 
-        getDetailUrl: ->
-            return "/works/#{@id}"
-
-        mergeJSON: (json)->
-            for field, value of json
-                this[field] = value
+        mergeView: (view)->
+            for field in PUBLIC_FIELDS
+                this[field] = view[field]
+                this[field] = null unless this[field] # convert falsy values to null
 
         toJSON: ->
             return _.pick this, PUBLIC_FIELDS
@@ -47,7 +46,7 @@ module.exports =
             options.relations ?= []
 
             view = @toJSON()
-            view.detail_url = @getDetailUrl()
+            view.detail_url = @detail_url
 
             if 'composer' in options.relations and @composer?
                 view.composer = @composer.toView()
