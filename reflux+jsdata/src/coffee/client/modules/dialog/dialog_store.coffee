@@ -4,64 +4,18 @@
 #
 
 angular        = require 'angular'
-templates      = require '../templates'
 _              = require 'underscore'
-{DIALOG_STATE} = require '../../constants'
-{EVENT}        = require '../../constants'
+{DIALOG_STATE} = require '../../../constants'
+{EVENT}        = require '../../../constants'
 
 ############################################################################################################
 
-dialog = angular.module 'dialog', []
-
-# Actions ##############################################################################
-
-dialog.factory 'DialogActions', (reflux)->
+angular.module('dialog').factory 'DialogActions', (reflux)->
     reflux.createActions ['open', 'close', 'register', 'setTitle']
 
-# Controllers ##########################################################################
+############################################################################################################
 
-dialog.controller 'DialogController', ($scope, DialogActions, DialogStore)->
-    DialogStore.listen (event, name)->
-        return unless event is EVENT.CHANGE
-        return unless name is $scope.name
-
-        $scope.$apply ->
-            data = DialogStore.get name
-            _.extend $scope, data
-            $scope.visible = data.state is DIALOG_STATE.OPEN
-
-    $scope.name ?= DialogStore.getUniqueName()
-    $scope.state ?= DIALOG_STATE.CLOSED
-    $scope.title ?= ''
-
-    $scope.close = ->
-        DialogActions.close $scope.name
-
-    DialogActions.register $scope.name, $scope.state, $scope.title
-
-# Directives ###########################################################################
-
-dialog.directive 'dialog', ($document, DialogActions, DialogStore)->
-    controller: 'DialogController'
-    controllerAs: 'controller'
-    link: ($scope, $el, attrs)->
-        $screen = $el.find('.screen').detach()
-        $modalBox = $el.find('.modal-box').detach()
-
-        $body = $document.find 'body'
-        $body.append $screen
-        $body.append $modalBox
-    restrict: 'E'
-    scope:
-        name: '@'
-        state: '@'
-        title: '@'
-    template: templates['dialog']
-    transclude: true
-
-# Stores ###############################################################################
-
-dialog.factory 'DialogStore', (DialogActions, reflux)->
+angular.module('dialog').factory 'DialogStore', (DialogActions, reflux)->
     reflux.createStore
         init: ->
             @_nextId = 0

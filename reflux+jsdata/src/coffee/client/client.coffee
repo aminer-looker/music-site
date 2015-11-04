@@ -17,13 +17,12 @@ require './modules/reflux'
 
 # Include all our modules so they can register with Angular
 require './modules/client_schema'
-require './modules/composer'
-require './modules/dialog'
-require './modules/editor'
-require './modules/instrument'
+require './modules/composer/composer_module'
+require './modules/dialog/dialog_module'
+require './modules/instrument/instrument_module'
 require './modules/page'
-require './modules/type'
-require './modules/work'
+require './modules/type/type_module'
+require './modules/work/work_module'
 
 # Include Angular and its extensions
 angular = require 'angular'
@@ -32,7 +31,6 @@ require 'angular-animate'
 MODULES = [
     'composer'
     'dialog'
-    'editor'
     'instrument'
     'ngAnimate'
     'page'

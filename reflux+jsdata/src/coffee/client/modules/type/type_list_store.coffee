@@ -4,25 +4,21 @@
 #
 
 angular = require 'angular'
-{EVENT} = require '../../constants'
+{EVENT} = require '../../../constants'
 
 ############################################################################################################
 
-module = angular.module 'type', ['reflux', 'schema']
-
-# Actions ##################################################################################################
-
-module.factory 'TypeActions', (reflux)->
+angular.module('type').factory 'TypeListActions', (reflux)->
     reflux.createActions
         loadAll: { children: ['success', 'error'] }
 
 # Stores ###################################################################################################
 
-module.factory 'TypeStore', (Type, TypeActions, reflux)->
+angular.module('type').factory 'TypeListStore', (Type, TypeListActions, reflux)->
     reflux.createStore
         init: ->
             @_types = []
-            @listenToMany TypeActions
+            @listenToMany TypeListActions
 
         getAll: ->
             return @_types
@@ -31,19 +27,19 @@ module.factory 'TypeStore', (Type, TypeActions, reflux)->
             return @_error
 
         onLoadAll: ->
-            console.log "TypeStore.onLoadAll()"
+            console.log "TypeListStore.onLoadAll()"
             Type.findAll()
                 .then (types)->
-                    TypeActions.loadAll.success (i.toView() for i in types)
+                    TypeListActions.loadAll.success (i.toView() for i in types)
                 .catch (error)->
-                    TypeActions.loadAll.error error
+                    TypeListActions.loadAll.error error
 
         onLoadAllSuccess: (types)->
-            console.log "TypeStore.onLoadSuccess(#{JSON.stringify(types)})"
+            console.log "TypeListStore.onLoadSuccess(#{JSON.stringify(types)})"
             @_types = types
             @trigger EVENT.CHANGE, @_types
 
         onLoadAllError: (error)->
-            console.log "TypeStore.onLoadAllError(#{error})"
+            console.log "TypeListStore.onLoadAllError(#{error})"
             @_error = error
             @trigger EVENT.ERROR, @_error

@@ -22,8 +22,8 @@ exports.installExtensions = ->
         query.then (resultSet)->
             return resultSet[0].count
 
-exports.Collection = store.defineResource require '../model/collections'
-exports.Composer   = store.defineResource require '../model/composers'
-exports.Instrument = store.defineResource require '../model/instruments'
-exports.Type       = store.defineResource require '../model/types'
-exports.Work       = store.defineResource require '../model/works'
+exports.Collection = store.defineResource require '../model/collection_model'
+exports.Composer   = store.defineResource require '../model/composer_model'
+exports.Instrument = store.defineResource require '../model/instrument_model'
+exports.Type       = store.defineResource require '../model/type_model'
+exports.Work       = store.defineResource require '../model/work_model'

@@ -4,25 +4,21 @@
 #
 
 angular = require 'angular'
-{EVENT} = require '../../constants'
+{EVENT} = require '../../../constants'
 
 ############################################################################################################
 
-module = angular.module 'instrument', ['reflux', 'schema']
-
-# Actions ##################################################################################################
-
-module.factory 'InstrumentActions', (reflux)->
+angular.module('instrument').factory 'InstrumentListActions', (reflux)->
     reflux.createActions
         loadAll: { children: ['success', 'error'] }
 
 # Stores ###################################################################################################
 
-module.factory 'InstrumentStore', (Instrument, InstrumentActions, reflux)->
+angular.module('instrument').factory 'InstrumentListStore', (Instrument, InstrumentListActions, reflux)->
     reflux.createStore
         init: ->
             @_instruments = []
-            @listenToMany InstrumentActions
+            @listenToMany InstrumentListActions
 
         getAll: ->
             return @_instruments
@@ -31,19 +27,19 @@ module.factory 'InstrumentStore', (Instrument, InstrumentActions, reflux)->
             return @_error
 
         onLoadAll: ->
-            console.log "InstrumentStore.onLoadAll()"
+            console.log "InstrumentListStore.onLoadAll()"
             Instrument.findAll()
                 .then (instruments)->
-                    InstrumentActions.loadAll.success (i.toView() for i in instruments)
+                    InstrumentListActions.loadAll.success (i.toView() for i in instruments)
                 .catch (error)->
-                    InstrumentActions.loadAll.error error
+                    InstrumentListActions.loadAll.error error
 
         onLoadAllSuccess: (instruments)->
-            console.log "InstrumentStore.onLoadSuccess(#{JSON.stringify(instruments)})"
+            console.log "InstrumentListStore.onLoadSuccess(#{JSON.stringify(instruments)})"
             @_instruments = instruments
             @trigger EVENT.CHANGE, @_instruments
 
         onLoadAllError: (error)->
-            console.log "InstrumentStore.onLoadAllError(#{error})"
+            console.log "InstrumentListStore.onLoadAllError(#{error})"
             @_error = error
             @trigger EVENT.ERROR, @_error
