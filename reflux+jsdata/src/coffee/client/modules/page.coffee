@@ -30,6 +30,7 @@ pageModule.factory 'Page', ->
         Object.defineProperties @prototype,
             list:
                 get: -> return @_list[..]
+
             pageNumber:
                 get: -> return @_pageNumber
 

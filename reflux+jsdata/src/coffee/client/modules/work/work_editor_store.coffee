@@ -53,23 +53,23 @@ angular.module('work').factory 'WorkEditorStore', (reflux, Work, WorkEditorActio
             @_workModel = model
             @_workView  = model.toView()
 
-            @trigger EVENT.ERROR, id, null
-            @trigger EVENT.CHANGE, id, @_workView
+            @trigger EVENT.CHANGE, id
+            @trigger EVENT.ERROR, id
 
         onBeginEditingError: (id, error)->
             console.log "WorkEditorStore.onBeginEditingError(#{id}, #{error})"
             @_error = error
 
-            @trigger EVENT.ERROR, id, error
-            @trigger EVENT.DONE
+            @trigger EVENT.ERROR, id
+            @trigger EVENT.DONE, id
 
         onCancel: ->
             return unless @isEditing()
             console.log "WorkEditorStore.onCancel()"
             @_isEditing = false
 
-            @trigger EVENT.CHANGE, @_workView.id, @_workView
-            @trigger EVENT.DONE
+            @trigger EVENT.CHANGE, @_workView.id
+            @trigger EVENT.DONE, @_workView.id
 
         onSave: ->
             return unless @isEditing()
@@ -87,13 +87,13 @@ angular.module('work').factory 'WorkEditorStore', (reflux, Work, WorkEditorActio
             @_error     = null
             @_isEditing = false
 
-            @trigger EVENT.ERROR, id, null
-            @trigger EVENT.SAVE, id, view
-            @trigger EVENT.DONE, id, view
+            @trigger EVENT.ERROR, id
+            @trigger EVENT.SAVE, id
+            @trigger EVENT.DONE, id
 
         onSaveError: (id, error)->
             console.log "WorkEditorStore.onSaveError(#{id}, #{JSON.stringify(error)})"
             @_error = error
 
-            @trigger EVENT.ERROR, id, error
-            @trigger EVENT.DONE, id, null
+            @trigger EVENT.ERROR, id
+            @trigger EVENT.DONE, id

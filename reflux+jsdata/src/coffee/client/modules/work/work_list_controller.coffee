@@ -12,12 +12,12 @@ angular              = require 'angular'
 angular.module('work').controller 'WorkListController', (
     $scope, $timeout, WorkEditorStore, WorkListStore, WorkActions
 )->
-    WorkListStore.listen (event, pageNumber, data)->
+    WorkListStore.listen (event, pageNumber)->
         $scope.$apply ->
             if event is EVENT.CHANGE
-                $scope.page = data
+                $scope.page = WorkListStore.get()
             else if event is EVENT.ERROR
-                $scope.error = data
+                $scope.error = WorkListStore.getError()
                 $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
     $scope.nextPage = ->

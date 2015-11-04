@@ -13,12 +13,12 @@ _                    = require 'underscore'
 angular.module('composer').controller 'ComposerModelController', (
     $location, $scope, $timeout, ComposerActions, ComposerModelStore
 )->
-    ComposerModelStore.listen (event, id, data)->
+    ComposerModelStore.listen (event, id)->
         $scope.$apply ->
             if event is EVENT.CHANGE
-                $scope.composer = data
+                $scope.composer = ComposerModelStore.get()
             else if event is EVENT.ERROR
-                $scope.error = data
+                $scope.error = ComposerModelStore.getError()
                 $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
     readLocationForId = ->

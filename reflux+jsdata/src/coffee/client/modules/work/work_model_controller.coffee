@@ -14,24 +14,25 @@ _                    = require 'underscore'
 angular.module('work').controller 'WorkModelController', (
     $location, $scope, $timeout, DialogActions, DialogStore, WorkEditorStore, WorkModelStore, WorkActions
 )->
-    WorkModelStore.listen (event, id, data)->
-        console.log "WorkModelController.WorkModelStore.listen(#{event}, #{id}, #{JSON.stringify(data)})"
+    WorkModelStore.listen (event, id)->
+        console.log "WorkModelController.WorkModelStore.listen(#{event}, #{id})"
         $scope.$apply ->
             if event is EVENT.CHANGE
-                $scope.work = data
+                $scope.work = WorkModelStore.get()
             else if event is EVENT.ERROR
-                $scope.error = data
+                $scope.error = WorkModelStore.getError()
                 $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
-    WorkEditorStore.listen (event, id, data)->
-        console.log "WorkModelController.WorkEditorStore.listen(#{event}, #{id}, #{JSON.stringify(data)})"
+    WorkEditorStore.listen (event, id)->
+        console.log "WorkModelController.WorkEditorStore.listen(#{event}, #{id})"
         $scope.$apply ->
             if event is EVENT.CHANGE
-                DialogActions.setTitle $scope.dialogName, "Edit #{data.title}"
+                work = WorkEditorStore.get()
+                DialogActions.setTitle $scope.dialogName, "Edit #{work.title}"
             else if event is EVENT.DONE
                 DialogActions.close $scope.dialogName
             else if event is EVENT.ERROR
-                $scope.error = data
+                $scope.error = WorkEditorStore.getError()
                 $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
     DialogStore.listen (event, name)->
@@ -45,12 +46,9 @@ angular.module('work').controller 'WorkModelController', (
                 WorkActions.cancel()
 
     $scope.dialogName = 'work-editor'
-    $scope.dialogTitle = ''
 
     $scope.beginEditing = ->
         return unless $scope.work?
-        console.log "$scope.beginEditing()"
-        console.log "    $scope.work: #{JSON.stringify($scope.work)}"
 
         WorkActions.beginEditing $scope.work.id
         DialogActions.open $scope.dialogName

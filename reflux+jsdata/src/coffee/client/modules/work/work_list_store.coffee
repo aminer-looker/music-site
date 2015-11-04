@@ -22,7 +22,7 @@ angular.module('work').factory 'WorkListStore', (
 )->
     reflux.createStore
         init: ->
-            ComposerModelStore.listen (event, id, data)=>
+            ComposerModelStore.listen (event, id)=>
                 if event is EVENT.CHANGE and id isnt @_composerId
                     @_composerId = id
                     WorkListActions.loadPage()
@@ -33,6 +33,9 @@ angular.module('work').factory 'WorkListStore', (
 
         get: ->
             return @_page
+
+        getError: ->
+            return @_error
 
         onLoadPage: (pageNumber)->
             return unless @_composerId?
@@ -52,16 +55,17 @@ angular.module('work').factory 'WorkListStore', (
                 .then (works)->
                     list = (w.toView() for w in works)
                     totalPages = Math.ceil total / PAGE_SIZE
-                    WorkListActions.loadPage.success pageNumber, totalPages, list
+                    WorkListActions.loadPage.success pageNumber, {totalPages:totalPages, list:list}
                 .catch (error)->
                     WorkListActions.loadPage.error pageNumber, error
 
         onLoadPageError: (pageNumber, error)->
-            @trigger EVENT.ERROR, pageNumber, error
+            @_error = error
+            @trigger EVENT.ERROR, pageNumber
 
-        onLoadPageSuccess: (pageNumber, totalPages, list)->
-            @_page = new Page pageNumber, totalPages, list
-            @trigger EVENT.CHANGE, pageNumber, @_page
+        onLoadPageSuccess: (pageNumber, data)->
+            @_page = new Page pageNumber, data.totalPages, data.list
+            @trigger EVENT.CHANGE, pageNumber
 
         onNextPage: ->
             if @_page?

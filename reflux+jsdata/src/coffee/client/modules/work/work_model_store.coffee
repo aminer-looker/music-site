@@ -17,8 +17,8 @@ angular.module('work').factory 'WorkModelActions', (reflux)->
 angular.module('work').factory 'WorkModelStore', (Work, WorkEditorStore, WorkModelActions, reflux)->
     reflux.createStore
         init: ->
-            WorkEditorStore.listen (event, id, data)=>
-                console.log "WorkModelStore.WorkEditorStore.listen(#{event}, #{id}, #{JSON.stringify(data)})"
+            WorkEditorStore.listen (event, id)=>
+                console.log "WorkModelStore.WorkEditorStore.listen(#{event}, #{id})"
                 return unless event is EVENT.SAVE
                 return unless @_work? and id is @_work.id
                 WorkModelActions.load id

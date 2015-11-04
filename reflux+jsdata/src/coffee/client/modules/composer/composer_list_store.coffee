@@ -25,8 +25,13 @@ angular.module('composer').factory 'ComposerListStore', (
             @_page = null
             @listenToMany ComposerListActions
 
-        get: ->
+        get: (pageNumber)->
+            return null unless @_page?
+            return null unless @_page.pageNumber is pageNumber
             return @_page
+
+        getError: ->
+            return @_error
 
         onLoadPage: (pageNumber)->
             pageNumber ?= 0
@@ -44,16 +49,17 @@ angular.module('composer').factory 'ComposerListStore', (
                 .then (composers)->
                     list = (c.toView() for c in composers)
                     totalPages = Math.ceil total / PAGE_SIZE
-                    ComposerListActions.loadPage.success pageNumber, totalPages, list
+                    ComposerListActions.loadPage.success pageNumber, {totalPages:totalPages, list:list}
                 .catch (error)->
                     ComposerListActions.loadPage.error pageNumber, error
 
         onLoadPageError: (pageNumber, error)->
-            @trigger EVENT.ERROR, pageNumber, error
+            @_error = error
+            @trigger EVENT.ERROR, pageNumber
 
-        onLoadPageSuccess: (pageNumber, totalPages, list)->
-            @_page = new Page pageNumber, totalPages, list
-            @trigger EVENT.CHANGE, pageNumber, @_page
+        onLoadPageSuccess: (pageNumber, data)->
+            @_page = new Page pageNumber, data.totalPages, data.list
+            @trigger EVENT.CHANGE, pageNumber
 
         onNextPage: ->
             if @_page?

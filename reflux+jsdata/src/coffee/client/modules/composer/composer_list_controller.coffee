@@ -12,12 +12,12 @@ angular              = require 'angular'
 angular.module('composer').controller 'ComposerListController', (
     $scope, $timeout, ComposerActions, ComposerListStore
 )->
-    ComposerListStore.listen (event, pageNumber, data)->
+    ComposerListStore.listen (event, id)->
         $scope.$apply ->
             if event is EVENT.CHANGE
-                $scope.composerPage = data
+                $scope.composerPage = ComposerListStore.get id
             else if event is EVENT.ERROR
-                $scope.error = data
+                $scope.error = ComposerListStore.getError()
                 $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
     $scope.nextPage = ->

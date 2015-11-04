@@ -18,10 +18,14 @@ angular.module('composer').factory 'ComposerModelStore', (Composer, ComposerMode
     reflux.createStore
         init: ->
             @_composer = null
+            @_error = null
             @listenToMany ComposerModelActions
 
         get: ->
             return @_composer
+
+        getError: ->
+            return @_error
 
         onLoad: (id)->
             Composer.find id
@@ -32,7 +36,8 @@ angular.module('composer').factory 'ComposerModelStore', (Composer, ComposerMode
 
         onLoadSuccess: (id, composer)->
             @_composer = composer
-            @trigger EVENT.CHANGE, id, composer
+            @trigger EVENT.CHANGE, id
 
         onLoadError: (id, error)->
-            @trigger EVENT.ERROR, id, error
+            @_error = error
+            @trigger EVENT.ERROR, id

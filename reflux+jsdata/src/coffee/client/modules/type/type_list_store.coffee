@@ -37,9 +37,9 @@ angular.module('type').factory 'TypeListStore', (Type, TypeListActions, reflux)-
         onLoadAllSuccess: (types)->
             console.log "TypeListStore.onLoadSuccess(#{JSON.stringify(types)})"
             @_types = types
-            @trigger EVENT.CHANGE, @_types
+            @trigger EVENT.CHANGE
 
         onLoadAllError: (error)->
             console.log "TypeListStore.onLoadAllError(#{error})"
             @_error = error
-            @trigger EVENT.ERROR, @_error
+            @trigger EVENT.ERROR

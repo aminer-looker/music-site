@@ -37,9 +37,9 @@ angular.module('instrument').factory 'InstrumentListStore', (Instrument, Instrum
         onLoadAllSuccess: (instruments)->
             console.log "InstrumentListStore.onLoadSuccess(#{JSON.stringify(instruments)})"
             @_instruments = instruments
-            @trigger EVENT.CHANGE, @_instruments
+            @trigger EVENT.CHANGE
 
         onLoadAllError: (error)->
             console.log "InstrumentListStore.onLoadAllError(#{error})"
             @_error = error
-            @trigger EVENT.ERROR, @_error
+            @trigger EVENT.ERROR
