@@ -18,7 +18,7 @@ angular.module('composer').factory 'ComposerListActions', (reflux)->
 ############################################################################################################
 
 angular.module('composer').factory 'ComposerListStore', (
-    $q, Composer, ComposerListActions, Page, reflux
+    $q, Composer, ComposerListActions, ErrorActions, Page, reflux
 )->
     reflux.createStore
         init: ->
@@ -56,6 +56,7 @@ angular.module('composer').factory 'ComposerListStore', (
         onLoadPageError: (pageNumber, error)->
             @_error = error
             @trigger EVENT.ERROR, pageNumber
+            ErrorActions.addError error
 
         onLoadPageSuccess: (pageNumber, data)->
             @_page = new Page pageNumber, data.totalPages, data.list

@@ -18,7 +18,7 @@ angular.module('work').factory 'WorkListActions', (reflux)->
 ############################################################################################################
 
 angular.module('work').factory 'WorkListStore', (
-    $q, ComposerModelStore, Page, reflux, Work, WorkListActions
+    $q, ComposerModelStore, ErrorActions, Page, reflux, Work, WorkListActions
 )->
     reflux.createStore
         init: ->
@@ -62,6 +62,7 @@ angular.module('work').factory 'WorkListStore', (
         onLoadPageError: (pageNumber, error)->
             @_error = error
             @trigger EVENT.ERROR, pageNumber
+            ErrorActions.addError error
 
         onLoadPageSuccess: (pageNumber, data)->
             @_page = new Page pageNumber, data.totalPages, data.list

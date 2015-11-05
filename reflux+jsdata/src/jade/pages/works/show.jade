@@ -10,6 +10,8 @@ block content
         .navigation(ng-show='work.composer.id')
             a(href='/composers/{{work.composer.id}}' target='_self') « back to composer page
 
+        error-display
+
         .header(class='ng-cloak' ng-show='work.title')
             h1 {{work.title}}
             a(href='http://classicalmusicdb.com{{work.url}}') see on ClassicalMusic DB
@@ -35,9 +37,6 @@ block content
 
         .controls
             input(type='button' ng-click='beginEditing()' value='Edit')
-
-        .error(class='ng-cloak' ng-show='error')
-            pre {{controller.error}}
 
         dialog(name='{{dialogName}}', state='closed', title='{{dialogTitle}}')
             work-editor(id='work.id')

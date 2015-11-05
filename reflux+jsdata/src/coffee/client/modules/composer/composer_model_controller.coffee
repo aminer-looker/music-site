@@ -14,12 +14,9 @@ angular.module('composer').controller 'ComposerModelController', (
     $location, $scope, $timeout, ComposerActions, ComposerModelStore
 )->
     ComposerModelStore.listen (event, id)->
+        return unless event is EVENT.CHANGE
         $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.composer = ComposerModelStore.get()
-            else if event is EVENT.ERROR
-                $scope.error = ComposerModelStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+            $scope.composer = ComposerModelStore.get()
 
     readLocationForId = ->
         match = /.*\/(.*)$/.exec $location.path()

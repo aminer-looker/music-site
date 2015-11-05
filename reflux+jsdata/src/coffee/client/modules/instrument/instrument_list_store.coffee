@@ -14,7 +14,9 @@ angular.module('instrument').factory 'InstrumentListActions', (reflux)->
 
 # Stores ###################################################################################################
 
-angular.module('instrument').factory 'InstrumentListStore', (Instrument, InstrumentListActions, reflux)->
+angular.module('instrument').factory 'InstrumentListStore', (
+    ErrorActions, Instrument, InstrumentListActions, reflux
+)->
     reflux.createStore
         init: ->
             @_instruments = []
@@ -43,3 +45,4 @@ angular.module('instrument').factory 'InstrumentListStore', (Instrument, Instrum
             console.log "InstrumentListStore.onLoadAllError(#{error})"
             @_error = error
             @trigger EVENT.ERROR
+            ErrorActions.addError error

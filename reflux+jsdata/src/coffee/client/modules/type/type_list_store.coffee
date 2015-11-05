@@ -14,7 +14,7 @@ angular.module('type').factory 'TypeListActions', (reflux)->
 
 # Stores ###################################################################################################
 
-angular.module('type').factory 'TypeListStore', (Type, TypeListActions, reflux)->
+angular.module('type').factory 'TypeListStore', (ErrorActions, Type, TypeListActions, reflux)->
     reflux.createStore
         init: ->
             @_types = []
@@ -43,3 +43,4 @@ angular.module('type').factory 'TypeListStore', (Type, TypeListActions, reflux)-
             console.log "TypeListStore.onLoadAllError(#{error})"
             @_error = error
             @trigger EVENT.ERROR
+            ErrorActions.addError error

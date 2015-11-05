@@ -10,6 +10,7 @@ _       = require 'underscore'
 
 workModule = angular.module 'work', [
     'composer'
+    'error'
     'dialog'
     'instrument'
     'page'

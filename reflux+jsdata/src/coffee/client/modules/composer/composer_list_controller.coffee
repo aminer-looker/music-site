@@ -13,12 +13,9 @@ angular.module('composer').controller 'ComposerListController', (
     $scope, $timeout, ComposerActions, ComposerListStore
 )->
     ComposerListStore.listen (event, id)->
+        return unless event is EVENT.CHANGE
         $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.composerPage = ComposerListStore.get id
-            else if event is EVENT.ERROR
-                $scope.error = ComposerListStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+            $scope.composerPage = ComposerListStore.get id
 
     $scope.nextPage = ->
         ComposerActions.nextPage()

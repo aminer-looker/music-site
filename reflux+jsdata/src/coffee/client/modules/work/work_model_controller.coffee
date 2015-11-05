@@ -12,28 +12,25 @@ _                    = require 'underscore'
 ############################################################################################################
 
 angular.module('work').controller 'WorkModelController', (
-    $location, $scope, $timeout, DialogActions, DialogStore, WorkEditorStore, WorkModelStore, WorkActions
+    $location, $scope, $timeout, DialogActions, DialogStore, ErrorActions,
+    WorkEditorStore, WorkModelStore, WorkActions
 )->
     WorkModelStore.listen (event, id)->
         console.log "WorkModelController.WorkModelStore.listen(#{event}, #{id})"
+        return unless event is EVENT.CHANGE
+
         $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.work = WorkModelStore.get()
-            else if event is EVENT.ERROR
-                $scope.error = WorkModelStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+            $scope.work = WorkModelStore.get()
 
     WorkEditorStore.listen (event, id)->
         console.log "WorkModelController.WorkEditorStore.listen(#{event}, #{id})"
+
         $scope.$apply ->
             if event is EVENT.CHANGE
                 work = WorkEditorStore.get()
                 DialogActions.setTitle $scope.dialogName, "Edit #{work.title}"
             else if event is EVENT.DONE
                 DialogActions.close $scope.dialogName
-            else if event is EVENT.ERROR
-                $scope.error = WorkEditorStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
     DialogStore.listen (event, name)->
         console.log "WorkModelController.DialogStore.listen(#{event}, #{name})"

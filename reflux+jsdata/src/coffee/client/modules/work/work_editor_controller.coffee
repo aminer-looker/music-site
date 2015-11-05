@@ -15,12 +15,9 @@ angular.module('work').controller 'WorkEditorController', (
 )->
     InstrumentListStore.listen (event)->
         console.log "WorkEditorController.InstrumentListStore.listen(#{event})}"
+        return unless event is EVENT.CHANGE
         $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.instruments = InstrumentListStore.getAll()
-            else if event is EVENT.ERROR
-                $scope.error = InstrumentListStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+            $scope.instruments = InstrumentListStore.getAll()
 
     TypeListStore.listen (event)->
         console.log "WorkEditorController.TypeListStore.listen(#{event})"
@@ -29,20 +26,14 @@ angular.module('work').controller 'WorkEditorController', (
         $scope.$apply ->
             if event is EVENT.CHANGE
                 $scope.types = TypeListStore.getAll()
-            else if event is EVENT.ERROR
-                $scope.error = TypeListStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
 
     WorkEditorStore.listen (event, id)->
         console.log "WorkEditorController.WorkEditorStore.listen(#{event}, #{id})"
         return if $scope.work? and id isnt $scope.work.id
+        return unless event is EVENT.CHANGE
 
         $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.work = WorkEditorStore.get()
-            else if event is EVENT.ERROR
-                $scope.error = WorkEditorStore.getError()
-                $timeout (-> $scope.error = null), ERROR_DISPLAY_TIME
+            $scope.work = WorkEditorStore.get()
 
     $scope.save = ->
         WorkActions.save()

@@ -16,7 +16,7 @@ angular.module('work').factory 'WorkEditorActions', (reflux)->
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkEditorStore', (reflux, Work, WorkEditorActions)->
+angular.module('work').factory 'WorkEditorStore', (ErrorActions, reflux, Work, WorkEditorActions)->
     reflux.createStore
         init: ->
             @_editing   = false
@@ -36,8 +36,8 @@ angular.module('work').factory 'WorkEditorStore', (reflux, Work, WorkEditorActio
             return @_isEditing
 
         onBeginEditing: (id)->
-            return unless id?
             console.log "WorkEditorStore.onBeginEditing(#{id})"
+            return unless id?
 
             @_isEditing = false
             Work.find id
@@ -62,18 +62,19 @@ angular.module('work').factory 'WorkEditorStore', (reflux, Work, WorkEditorActio
 
             @trigger EVENT.ERROR, id
             @trigger EVENT.DONE, id
+            ErrorActions.addError error
 
         onCancel: ->
-            return unless @isEditing()
             console.log "WorkEditorStore.onCancel()"
+            return unless @isEditing()
             @_isEditing = false
 
             @trigger EVENT.CHANGE, @_workView.id
             @trigger EVENT.DONE, @_workView.id
 
         onSave: ->
-            return unless @isEditing()
             console.log "WorkEditorStore.onSave()"
+            return unless @isEditing()
 
             @_workModel.mergeView @_workView
             @_workModel.DSSave()
@@ -97,3 +98,4 @@ angular.module('work').factory 'WorkEditorStore', (reflux, Work, WorkEditorActio
 
             @trigger EVENT.ERROR, id
             @trigger EVENT.DONE, id
+            ErrorActions.addError {message:"Could not save. Please try again later."}

@@ -14,7 +14,9 @@ angular.module('work').factory 'WorkModelActions', (reflux)->
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkModelStore', (Work, WorkEditorStore, WorkModelActions, reflux)->
+angular.module('work').factory 'WorkModelStore', (
+    ErrorActions, reflux, Work, WorkEditorStore, WorkModelActions
+)->
     reflux.createStore
         init: ->
             WorkEditorStore.listen (event, id)=>
@@ -49,3 +51,4 @@ angular.module('work').factory 'WorkModelStore', (Work, WorkEditorStore, WorkMod
         onLoadError: (id, error)->
             console.log "WorkModelStore.onLoadError(#{id}, #{JSON.stringify(error)})"
             @trigger EVENT.ERROR, id, error
+            ErrorActions.addError error

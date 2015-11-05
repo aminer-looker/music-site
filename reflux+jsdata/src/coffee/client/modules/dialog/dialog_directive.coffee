@@ -8,7 +8,7 @@ templates = require '../../templates'
 
 ############################################################################################################
 
-angular.module('dialog').directive 'dialog', ($document, DialogActions, DialogStore)->
+angular.module('dialog').directive 'dialog', ($document)->
     controller: 'DialogController'
     controllerAs: 'controller'
     link: ($scope, $el, attrs)->
