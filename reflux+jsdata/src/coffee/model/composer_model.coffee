@@ -3,13 +3,12 @@
 # All rights reserved.
 #
 
-_ = require '../underscore'
+ReadOnlyView = require '../read_only_view'
+_            = require '../underscore'
 
 ############################################################################################################
 
-PUBLIC_FIELDS = [
-    'id', 'first_name', 'last_name', 'url'
-]
+PUBLIC_FIELDS = ['id', 'first_name', 'last_name', 'url']
 
 ############################################################################################################
 
@@ -21,20 +20,18 @@ module.exports =
 
     computed:
 
+        detail_url: ['id', (id)->
+            return "/composers/#{id}"
+        ]
+
         full_name: ['first_name', 'last_name', (first_name, last_name)->
             return "#{first_name} #{last_name}"
         ]
 
     methods:
 
-        getDetailUrl: ->
-            return "/composers/#{@id}"
-
         toJSON: ->
             return _.pick this, PUBLIC_FIELDS
 
-        toView: ->
-            view = @toJSON()
-            view.full_name = @full_name
-            view.detail_url = @getDetailUrl()
-            return view
+        toReadOnlyView: ->
+            return new ReadOnlyView this, PUBLIC_FIELDS, 'detail_url', 'full_name'

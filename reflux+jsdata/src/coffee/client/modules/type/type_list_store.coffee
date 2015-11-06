@@ -30,7 +30,7 @@ angular.module('type').factory 'TypeListStore', (ErrorActions, Type, TypeListAct
             console.log "TypeListStore.onLoadAll()"
             Type.findAll()
                 .then (types)->
-                    TypeListActions.loadAll.success (i.toView() for i in types)
+                    TypeListActions.loadAll.success (i.toReadOnlyView() for i in types)
                 .catch (error)->
                     TypeListActions.loadAll.error error
 

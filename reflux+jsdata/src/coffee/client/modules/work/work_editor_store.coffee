@@ -47,11 +47,11 @@ angular.module('work').factory 'WorkEditorStore', (ErrorActions, reflux, Work, W
                     WorkEditorActions.beginEditing.error id, error
 
         onBeginEditingSuccess: (id, model)->
-            console.log "WorkEditorStore.onBeginEditingSuccess(#{id}, #{JSON.stringify(model.toView())})"
+            console.log "WorkEditorStore.onBeginEditingSuccess(#{id}, #{JSON.stringify(model.toJSON())})"
             @_error     = null
             @_isEditing = true
             @_workModel = model
-            @_workView  = model.toView()
+            @_workView  = model.toJSON()
 
             @trigger EVENT.CHANGE, id
             @trigger EVENT.ERROR, id
@@ -76,7 +76,7 @@ angular.module('work').factory 'WorkEditorStore', (ErrorActions, reflux, Work, W
             console.log "WorkEditorStore.onSave()"
             return unless @isEditing()
 
-            @_workModel.mergeView @_workView
+            @_workModel.mergeChanges @_workView
             @_workModel.DSSave()
                 .then =>
                     WorkEditorActions.save.success @_workView.id, @_workView

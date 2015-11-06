@@ -32,7 +32,7 @@ angular.module('instrument').factory 'InstrumentListStore', (
             console.log "InstrumentListStore.onLoadAll()"
             Instrument.findAll()
                 .then (instruments)->
-                    InstrumentListActions.loadAll.success (i.toView() for i in instruments)
+                    InstrumentListActions.loadAll.success (i.toReadOnlyView() for i in instruments)
                 .catch (error)->
                     InstrumentListActions.loadAll.error error
 

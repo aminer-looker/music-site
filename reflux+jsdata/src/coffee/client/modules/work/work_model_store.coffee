@@ -39,7 +39,7 @@ angular.module('work').factory 'WorkModelStore', (
                 .then (work)->
                     Work.loadRelations work, relations
                 .then (work)->
-                    WorkModelActions.load.success id, work.toView relations:relations
+                    WorkModelActions.load.success id, work.toReadOnlyView()
                 .catch (error)->
                     WorkModelActions.load.error id, error
 

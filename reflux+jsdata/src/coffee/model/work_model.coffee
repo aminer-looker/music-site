@@ -3,6 +3,7 @@
 # All rights reserved.
 #
 
+ReadOnlyView = require '../read_only_view'
 _ = require '../underscore'
 
 ############################################################################################################
@@ -23,41 +24,31 @@ PUBLIC_FIELDS = [
     'collection_id'
 ]
 
+############################################################################################################
+
 module.exports =
     name:     'work'
     endpoint: '/api/works'
     table:    'works'
 
     computed:
-        detail_url: -> "/works/#{@id}"
-        public_fields: -> PUBLIC_FIELDS
+
+        detail_url: ['id', (id)->
+            return "/works/#{id}"
+        ]
 
     methods:
 
-        mergeView: (view)->
+        mergeChanges: (changes)->
             for field in PUBLIC_FIELDS
-                this[field] = view[field]
+                this[field] = changes[field]
                 this[field] = null unless this[field] # convert falsy values to null
 
         toJSON: ->
             return _.pick this, PUBLIC_FIELDS
 
-        toView: (options={})->
-            options.relations ?= []
-
-            view = @toJSON()
-            view.detail_url = @detail_url
-
-            if 'composer' in options.relations and @composer?
-                view.composer = @composer.toView()
-
-            if 'instrument' in options.relations and @instrument?
-                view.instrument = @instrument.toView()
-
-            if 'type' in options.relations and @type?
-                view.type = @type.toView()
-
-            return view
+        toReadOnlyView: ->
+            return new ReadOnlyView this, PUBLIC_FIELDS, 'composer', 'detail_url', 'instrument', 'type'
 
     relations:
 

@@ -32,7 +32,7 @@ angular.module('composer').factory 'ComposerModelStore', (
         onLoad: (id)->
             Composer.find id
                 .then (composer)=>
-                    ComposerModelActions.load.success id, composer.toView()
+                    ComposerModelActions.load.success id, composer.toReadOnlyView()
                 .catch (error)->
                     ComposerModelActions.load.error id, error
 

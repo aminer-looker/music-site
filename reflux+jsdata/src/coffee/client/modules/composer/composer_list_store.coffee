@@ -47,7 +47,7 @@ angular.module('composer').factory 'ComposerListStore', (
                     limit  = PAGE_SIZE
                     Composer.findAll offset:offset, limit:limit
                 .then (composers)->
-                    list = (c.toView() for c in composers)
+                    list = (c.toReadOnlyView() for c in composers)
                     totalPages = Math.ceil total / PAGE_SIZE
                     ComposerListActions.loadPage.success pageNumber, {totalPages:totalPages, list:list}
                 .catch (error)->

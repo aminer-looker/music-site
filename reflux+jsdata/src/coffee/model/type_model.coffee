@@ -3,7 +3,12 @@
 # All rights reserved.
 #
 
+ReadOnlyView = require '../read_only_view'
 _ = require '../underscore'
+
+############################################################################################################
+
+PUBLIC_FIELDS = ['id', 'name']
 
 ############################################################################################################
 
@@ -17,5 +22,5 @@ module.exports =
         toJSON: ->
             return _.pick this, 'id', 'name'
 
-        toView: ->
-            return @toJSON()
+        toReadOnlyView: ->
+            return new ReadOnlyView this, @public_fields

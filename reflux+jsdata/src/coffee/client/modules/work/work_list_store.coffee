@@ -53,7 +53,7 @@ angular.module('work').factory 'WorkListStore', (
                     limit  = PAGE_SIZE
                     Work.findAll composer_id:@_composerId, offset:offset, limit:limit
                 .then (works)->
-                    list = (w.toView() for w in works)
+                    list = (w.toReadOnlyView() for w in works)
                     totalPages = Math.ceil total / PAGE_SIZE
                     WorkListActions.loadPage.success pageNumber, {totalPages:totalPages, list:list}
                 .catch (error)->
