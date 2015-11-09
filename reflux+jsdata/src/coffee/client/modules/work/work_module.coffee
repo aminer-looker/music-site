@@ -13,6 +13,7 @@ workModule = angular.module 'work', [
     'error'
     'dialog'
     'instrument'
+    'mixins'
     'page'
     'reflux'
     'schema'
