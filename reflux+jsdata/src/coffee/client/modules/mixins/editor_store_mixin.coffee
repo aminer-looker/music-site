@@ -22,6 +22,39 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
             this["onSet#{_.camelize(field)}"] = (view, field, value, commit)=>
                 @_onFieldChanged view, field, value, commit
 
+    # Override Methods #################################################################
+
+    _getUpdateActions: ->
+        # Subclasses must override this method to return a hash mapping fields on the model to the actions
+        # which should be fired when those fields are updated.  The view's `setActions` method will be
+        # called with the hash, and a set of action methods will be added to this store which correspond to
+        # those actions.
+
+        throw new Error 'subclasses must override _getUpdateActions'
+
+    _loadModel: (id)->
+        # Subclasses must override this method to return a promise of the model object specified by the
+        # given `id`.  The caller can deal with either a "resolved" or "rejected" promise.
+
+        throw new Error 'subclasses must override _loadModel'
+
+    _saveModel: (view, model)->
+        # Subclasses must override this method to update the model with data given in the view, and then to
+        # take whatever steps are necessary to persist that change.  The subclass should then return a
+        # a promise of the updated model object.  The caller will be able to deal with either a "resolved"
+        # or "rejected" promise.
+
+        throw new Error 'subclasses must override _saveModel'
+
+    # _validate<FieldName>(field, value, errors)->
+    #     # Subclasses may add validation methods for each field specified in `_getUpdateActions`.  If such
+    #     # a method exists, it will be called whenever the associated field changes.  If any validation
+    #     # errors are detected, they may be pushed into the `errors` array.  The subclass must return the
+    #     # new value to be used for the field (even if it's just to return `value`).
+    #
+    #     if parseInt(value) % 2 is 1 then errors.push 'no odd numbers!'
+    #     return value
+
     # Public Methods ###################################################################
 
     get: ->

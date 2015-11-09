@@ -4,8 +4,7 @@
 #
 
 angular = require 'angular'
-_       = require 'underscore'
-{EVENT} = require '../../../constants'
+_       = require '../../../underscore'
 
 ############################################################################################################
 
