@@ -9,20 +9,35 @@
         ng-model='work.instrument_id'
         ng-options='i.id as i.name for i in instruments'
     )
+.errors
+    p(ng-repeat='message in errors.instrument_id')
+        {{message}}
+
 .row
     label type
     select(
         ng-model='work.type_id'
         ng-options='t.id as t.name for t in types'
     )
+.errors
+    p(ng-repeat='message in errors.type_id')
+        {{message}}
+
 .row
     label composed
     input(ng-model='work.composed_year')
+.errors
+    p(ng-repeat='message in errors.composed_year')
+        {{message}}
+
 .row
     label difficulty
     input(ng-model='work.difficulty')
+.errors
+    p(ng-repeat='message in errors.difficulty')
+        {{message}}
 
 .button-bar
-    input(ng-click='save()' type='submit' value='Save')
+    input(ng-click='save()' ng-disabled='!isValid' type='submit' value='Save')
     input(ng-click='cancel()' type='button' value='Cancel')
 

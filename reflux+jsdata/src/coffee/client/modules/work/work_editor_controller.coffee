@@ -30,10 +30,13 @@ angular.module('work').controller 'WorkEditorController', (
     WorkEditorStore.listen (event, id)->
         console.log "WorkEditorController.WorkEditorStore.listen(#{event}, #{id})"
         return if $scope.work? and id isnt $scope.work.id
-        return unless event is EVENT.CHANGE
 
         $scope.$apply ->
-            $scope.work = WorkEditorStore.get()
+            if event is EVENT.CHANGE
+                $scope.work = WorkEditorStore.get()
+            else if event is EVENT.INVALID
+                $scope.isValid = WorkEditorStore.isValid()
+                $scope.errors = WorkEditorStore.getValidationErrors()
 
     $scope.save = ->
         WorkActions.save()

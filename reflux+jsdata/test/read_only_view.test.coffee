@@ -55,6 +55,32 @@ describe 'read_only_view.coffee:', ->
             @source.alpha = 'a'
             view.alpha.should.equal 'A'
 
+        describe 'with a setter action', ->
+
+            beforeEach ->
+                @view = new ReadOnlyView @source, 'alpha', 'bravo', 'charlie'
+
+            it 'requires the field already be defined', ->
+                func = => @view.setAction 'delta', (->)
+                expect(func).to.throw Error, 'does not have a'
+
+            it 'requires actions to be functions', ->
+                func = => @view.setAction 'bravo', {}
+                expect(func).to.throw Error, 'must be a function'
+
+            it 'calls the action when mutated', ->
+                action = sinon.spy()
+                @view.setAction 'bravo', action
+                @view.bravo = 'bbb'
+
+                action.calledWith @view, 'bravo', 'bbb'
+
+            it 'does not change the value when mutated', ->
+                @view.setAction 'bravo', (->)
+                @view.bravo = 'bbb'
+
+                @view.bravo.should.equal 'B'
+
     describe 'an array field', ->
 
         describe 'with simple values', ->

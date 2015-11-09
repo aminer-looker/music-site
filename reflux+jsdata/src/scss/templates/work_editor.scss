@@ -11,7 +11,7 @@ work-editor {
         align-items: center;
         display: flex;
         margin: 0 auto;
-        margin-bottom: 1rem;
+        margin-bottom: 0.25rem;
         width: 66%;
 
         &.last-child {
@@ -43,6 +43,19 @@ work-editor {
             border-radius: 0.4rem;
             font-family: $font-family-user;
             font-size: $font-size-medium;
+        }
+    }
+
+    .errors {
+        width: 66%;
+        margin: 0 auto;
+        margin-bottom: 1rem;
+
+        p {
+            color: $color-red-error;
+            font-family: $font-family-control;
+            font-size: $font-size-small;
+            margin-left: 33%;
         }
     }
 }

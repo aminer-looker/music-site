@@ -23,4 +23,4 @@ module.exports =
             return _.pick this, 'id', 'name'
 
         toReadOnlyView: ->
-            return new ReadOnlyView this, @public_fields
+            return new ReadOnlyView this, PUBLIC_FIELDS

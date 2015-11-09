@@ -14,6 +14,7 @@ module.exports =
         CHANGE: 'change'
         DONE:   'done'
         ERROR:  'error'
+        INVALID: 'invalid'
         REMOVE: 'remove'
         SAVE:   'save'
     DIALOG_STATE:

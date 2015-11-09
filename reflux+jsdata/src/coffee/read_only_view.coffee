@@ -11,6 +11,7 @@ module.exports = class ReadOnlyView
 
     constructor: (source, fields...)->
         if fields.length is 0 then throw new Error 'at least one field must be provided'
+        @_actions = {}
         @_cache = {}
         @_source = source
 
@@ -23,6 +24,19 @@ module.exports = class ReadOnlyView
                 set: @_makeSetter field
 
         Object.defineProperties this, propertyDefinitions
+
+    # Public Methods ##################################################################
+
+    setAction: (field, action)->
+        if not @hasOwnProperty(field) then throw new Error "this view does not have a #{field} property"
+        if not _.isFunction(action) then throw new Error "action must be a function"
+        @_actions[field] = action
+
+    setActions: (hash)->
+        for field, action of hash
+            @setAction field, action
+
+    updateCache: (field, value, key)->
 
     # Private Methods #################################################################
 
@@ -44,11 +58,14 @@ module.exports = class ReadOnlyView
 
     _makeGetter: (field)->
         return ->
-            if not @_cache[field]?
+            if not @_cache.hasOwnProperty field
                 @_cache[field] = @_convertObject @_source[field]
 
             return @_cache[field]
 
     _makeSetter: (field)->
-        return ->
-            throw new Error "#{field} is read-only"
+        return (value)->
+            actionFunc = @_actions[field]
+            if not actionFunc then throw new Error "#{field} is read-only"
+            commit = (value)=> @_cache[field] = value
+            actionFunc this, field, value, commit

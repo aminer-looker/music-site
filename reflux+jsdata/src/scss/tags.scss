@@ -45,6 +45,16 @@ input[type="button"], input[type="submit"] {
         background: $color-blue-light;
     }
 
+    &:disabled {
+        background: $color-gray-faint;
+        border-color: $color-gray-light;
+        color: $color-gray-light;
+
+        &:hover {
+            background: $color-gray-faint;
+        }
+    }
+
     &:hover {
         background: $color-blue-faint;
     }
