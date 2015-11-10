@@ -1,7 +1,0 @@
-#!/bin/bash
-
-pushd './dist/' &>/dev/null
-clear
-nodemon ./server/server.coffee $*
-echo ''
-popd &>/dev/null
