@@ -3,20 +3,16 @@
 # All rights reserved.
 #
 
-angular              = require 'angular'
-_                    = require 'underscore'
-{ERROR_DISPLAY_TIME} = require '../../../constants'
-{EVENT}              = require '../../../constants'
+angular = require 'angular'
+_       = require 'underscore'
 
 ############################################################################################################
 
 angular.module('composer').controller 'ComposerModelController', (
     $location, $scope, $timeout, ComposerActions, ComposerModelStore
 )->
-    ComposerModelStore.listen (event, id)->
-        return unless event is EVENT.CHANGE
-        $scope.$apply ->
-            $scope.composer = ComposerModelStore.get()
+    ComposerModelStore.$listen $scope, (event, id)->
+        $scope.composer = ComposerModelStore.get()
 
     readLocationForId = ->
         match = /.*\/(.*)$/.exec $location.path()

@@ -3,19 +3,15 @@
 # All rights reserved.
 #
 
-angular              = require 'angular'
-{ERROR_DISPLAY_TIME} = require '../../../constants'
-{EVENT}              = require '../../../constants'
+angular = require 'angular'
 
 ############################################################################################################
 
 angular.module('composer').controller 'ComposerListController', (
-    $scope, $timeout, ComposerActions, ComposerListStore
+    $scope, ComposerActions, ComposerListStore
 )->
-    ComposerListStore.listen (event, id)->
-        return unless event is EVENT.CHANGE
-        $scope.$apply ->
-            $scope.composerPage = ComposerListStore.get id
+    ComposerListStore.$listen $scope, (event, id)->
+        $scope.composerPage = ComposerListStore.get id
 
     $scope.nextPage = ->
         ComposerActions.nextPage()

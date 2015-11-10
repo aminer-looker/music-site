@@ -11,14 +11,13 @@ _              = require 'underscore'
 ############################################################################################################
 
 angular.module('dialog').controller 'DialogController', ($scope, DialogActions, DialogStore)->
-    DialogStore.listen (event, name)->
+    DialogStore.$listen $scope, (event, name)->
         return unless event is EVENT.CHANGE
         return unless name is $scope.name
 
-        $scope.$apply ->
-            data = DialogStore.get name
-            _.extend $scope, data
-            $scope.visible = data.state is DIALOG_STATE.OPEN
+        data = DialogStore.get name
+        _.extend $scope, data
+        $scope.visible = data.state is DIALOG_STATE.OPEN
 
     $scope.name ?= DialogStore.getUniqueName()
 

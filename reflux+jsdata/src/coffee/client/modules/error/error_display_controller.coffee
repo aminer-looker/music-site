@@ -4,15 +4,12 @@
 #
 
 angular = require 'angular'
-{EVENT} = require '../../../constants'
 
 ############################################################################################################
 
 angular.module('error').controller 'ErrorDisplayController', ($scope, ErrorActions, ErrorStore)->
-    ErrorStore.listen (event, id)->
-        return unless event is EVENT.CHANGE
-        $scope.$apply ->
-            $scope.errors = ErrorStore.getAll()
+    ErrorStore.$listen $scope, (event, id)->
+        $scope.errors = ErrorStore.getAll()
 
     $scope.dismiss = (id)->
         ErrorActions.removeError id

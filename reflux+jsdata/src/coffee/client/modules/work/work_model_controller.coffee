@@ -3,44 +3,32 @@
 # All rights reserved.
 #
 
-angular              = require 'angular'
-_                    = require 'underscore'
-{DIALOG_STATE}       = require '../../../constants'
-{ERROR_DISPLAY_TIME} = require '../../../constants'
-{EVENT}              = require '../../../constants'
+angular        = require 'angular'
+_              = require 'underscore'
+{DIALOG_STATE} = require '../../../constants'
+{EVENT}        = require '../../../constants'
 
 ############################################################################################################
 
 angular.module('work').controller 'WorkModelController', (
-    $location, $scope, $timeout, DialogActions, DialogStore, ErrorActions,
-    WorkEditorStore, WorkModelStore, WorkActions
+    $location, $scope, DialogActions, DialogStore, WorkEditorStore, WorkModelStore, WorkActions
 )->
-    WorkModelStore.listen (event, id)->
-        console.log "WorkModelController.WorkModelStore.listen(#{event}, #{id})"
-        return unless event is EVENT.CHANGE
+    WorkModelStore.$listen $scope, (event, id)->
+        $scope.work = WorkModelStore.get()
 
-        $scope.$apply ->
-            $scope.work = WorkModelStore.get()
+    WorkEditorStore.$listen $scope, (event, id)->
+        if event is EVENT.CHANGE
+            work = WorkEditorStore.get()
+            DialogActions.setTitle $scope.dialogName, "Edit #{work.title}"
+        else if event is EVENT.DONE
+            DialogActions.close $scope.dialogName
 
-    WorkEditorStore.listen (event, id)->
-        console.log "WorkModelController.WorkEditorStore.listen(#{event}, #{id})"
-
-        $scope.$apply ->
-            if event is EVENT.CHANGE
-                work = WorkEditorStore.get()
-                DialogActions.setTitle $scope.dialogName, "Edit #{work.title}"
-            else if event is EVENT.DONE
-                DialogActions.close $scope.dialogName
-
-    DialogStore.listen (event, name)->
-        console.log "WorkModelController.DialogStore.listen(#{event}, #{name})"
-        return unless event is EVENT.CHANGE
+    DialogStore.$listen $scope, (event, name)->
         return unless name is $scope.dialogName
 
-        $scope.$apply ->
-            dialogData = DialogStore.get name
-            if dialogData.state is DIALOG_STATE.CLOSED
-                WorkActions.cancel()
+        dialogData = DialogStore.get name
+        if dialogData.state is DIALOG_STATE.CLOSED
+            WorkActions.cancel()
 
     $scope.dialogName = 'work-editor'
 

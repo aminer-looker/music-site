@@ -10,4 +10,10 @@ reflux = require 'reflux'
 
 refluxModule = angular.module 'reflux', []
 
-refluxModule.factory 'reflux', -> return reflux
+refluxModule.factory 'reflux', ->
+    reflux.StoreMethods.$listen = ($scope, callback)->
+        @listen (event, id)->
+            $scope.$apply ->
+                callback(event, id)
+
+    return reflux

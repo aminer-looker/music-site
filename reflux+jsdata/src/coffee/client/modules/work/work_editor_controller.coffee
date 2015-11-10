@@ -3,40 +3,23 @@
 # All rights reserved.
 #
 
-angular              = require 'angular'
-{ERROR_DISPLAY_TIME} = require '../../../constants'
-{EVENT}              = require '../../../constants'
+angular = require 'angular'
 
 ############################################################################################################
 
 angular.module('work').controller 'WorkEditorController', (
-    $scope, $timeout, InstrumentActions, InstrumentListStore,
-    TypeActions, TypeListStore, WorkEditorStore, WorkActions
+    $scope, InstrumentActions, InstrumentListStore, TypeActions, TypeListStore, WorkEditorStore, WorkActions
 )->
-    InstrumentListStore.listen (event)->
-        console.log "WorkEditorController.InstrumentListStore.listen(#{event})}"
-        return unless event is EVENT.CHANGE
-        $scope.$apply ->
-            $scope.instruments = InstrumentListStore.getAll()
+    InstrumentListStore.$listen $scope, (event, id)->
+        $scope.instruments = InstrumentListStore.getAll()
 
-    TypeListStore.listen (event)->
-        console.log "WorkEditorController.TypeListStore.listen(#{event})"
-        return unless event is EVENT.CHANGE
+    TypeListStore.$listen $scope, (event, id)->
+        $scope.types = TypeListStore.getAll()
 
-        $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.types = TypeListStore.getAll()
-
-    WorkEditorStore.listen (event, id)->
-        console.log "WorkEditorController.WorkEditorStore.listen(#{event}, #{id})"
-        return if $scope.work? and id isnt $scope.work.id
-
-        $scope.$apply ->
-            if event is EVENT.CHANGE
-                $scope.work = WorkEditorStore.get()
-            else if event is EVENT.INVALID
-                $scope.isValid = WorkEditorStore.isValid()
-                $scope.errors = WorkEditorStore.getValidationErrors()
+    WorkEditorStore.$listen $scope, (event, id)->
+        $scope.work    = WorkEditorStore.get()
+        $scope.isValid = WorkEditorStore.isValid()
+        $scope.errors  = WorkEditorStore.getValidationErrors()
 
     $scope.save = ->
         WorkActions.save()

@@ -3,20 +3,15 @@
 # All rights reserved.
 #
 
-angular              = require 'angular'
-{ERROR_DISPLAY_TIME} = require '../../../constants'
-{EVENT}              = require '../../../constants'
+angular = require 'angular'
 
 ############################################################################################################
 
 angular.module('work').controller 'WorkListController', (
-    $scope, $timeout, WorkEditorStore, WorkListStore, WorkActions
+    $scope, WorkListStore, WorkActions
 )->
-    WorkListStore.listen (event, pageNumber)->
-        return unless event is EVENT.CHANGE
-
-        $scope.$apply ->
-            $scope.page = WorkListStore.get()
+    WorkListStore.$listen $scope, (event, pageNumber)->
+        $scope.page = WorkListStore.get()
 
     $scope.nextPage = ->
         WorkActions.nextPage()
