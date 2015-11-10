@@ -52,7 +52,7 @@ angular.module('work').factory 'WorkEditorStore', (
             model.mergeChanges view
             return model.DSSave()
 
-        _validateComposedYear: (field, value, errors)->
+        _validateComposedYear: (value, errors)->
             numberValue = parseInt value
             currentYear = new Date().getFullYear()
             if not _.isNumber(numberValue) then errors.push 'must be a number'
@@ -60,14 +60,14 @@ angular.module('work').factory 'WorkEditorStore', (
             if numberValue > currentYear then errors.push 'cannot be in the future'
             return value
 
-        _validateDifficulty: (field, value, errors)->
+        _validateDifficulty: (value, errors)->
             numberValue = parseFloat value
             if _.isNaN(numberValue) then errors.push 'must be a number'
             if numberValue < 0 then errors.push 'must be at least 0.00'
             if numberValue > 100.00 then errors.push 'must be no more than 100.00'
             return value
 
-        _validateInstrumentId: (field, value, errors)->
+        _validateInstrumentId: (value, errors)->
             for instrument in InstrumentListStore.getAll()
                 if instrument.id is value
                     return value
@@ -75,7 +75,7 @@ angular.module('work').factory 'WorkEditorStore', (
             errors.push 'must be a valid instrument'
             return null
 
-        _validateTypeId: (field, value, errors)->
+        _validateTypeId: (value, errors)->
             for type in TypeListStore.getAll()
                 if type.id is value
                     return value

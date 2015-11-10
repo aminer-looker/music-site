@@ -46,7 +46,7 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
 
         throw new Error 'subclasses must override _saveModel'
 
-    # _validate<FieldName>(field, value, errors)->
+    # _validate<FieldName>(value, errors)->
     #     # Subclasses may add validation methods for each field specified in `_getUpdateActions`.  If such
     #     # a method exists, it will be called whenever the associated field changes.  If any validation
     #     # errors are detected, they may be pushed into the `errors` array.  The subclass must return the
@@ -169,7 +169,7 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         methodName = "_validate#{_.camelize(field)}"
         if _.isFunction this[methodName]
             errors = []
-            value = this[methodName](field, value, errors)
+            value = this[methodName](value, errors)
             @_markInvalid field, errors
 
         commit value
