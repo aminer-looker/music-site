@@ -4,21 +4,19 @@
 #
 
 angular     = require 'angular'
+_           = require '../../../underscore'
 {EVENT}     = require '../../../constants'
 {PAGE_SIZE} = require '../../../constants'
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkListActions', (reflux)->
-    reflux.createActions
-        loadPage: { children: ['success', 'error'] }
-        nextPage: {}
-        prevPage: {}
+angular.module('work').factory 'WorkListActions', (ListStoreMixinActions, reflux)->
+    return _.extend {}, ListStoreMixinActions
 
 ############################################################################################################
 
 angular.module('work').factory 'WorkListStore', (
-    $q, ComposerModelStore, ErrorActions, Page, reflux, Work, WorkListActions
+    ComposerModelStore, ListStoreMixin, reflux, Work, WorkListActions
 )->
     reflux.createStore
         init: ->
@@ -28,60 +26,21 @@ angular.module('work').factory 'WorkListStore', (
                     WorkListActions.loadPage()
 
             @_composerId = null
-            @_page = null
-            @listenToMany WorkListActions
 
-        get: ->
-            return @_page
+            @_actions = WorkListActions
+            @listenToMany @_actions
 
-        getError: ->
-            return @_error
+        mixins: [ListStoreMixin]
 
-        onLoadPage: (pageNumber)->
-            return unless @_composerId?
+        # ListStoreMixin Methods #######################################################
 
-            pageNumber ?= 0
-            total = null
-            list = null
+        _canLoad: ->
+            @_composerId?
 
-            $q.when(true)
-                .then =>
-                    Work.count composer_id:@_composerId
-                .then (count)=>
-                    total  = count
-                    offset = pageNumber * PAGE_SIZE
-                    limit  = PAGE_SIZE
-                    Work.findAll composer_id:@_composerId, offset:offset, limit:limit
-                .then (works)->
-                    list = (w.toReadOnlyView() for w in works)
-                    totalPages = Math.ceil total / PAGE_SIZE
-                    WorkListActions.loadPage.success pageNumber, {totalPages:totalPages, list:list}
-                .catch (error)->
-                    WorkListActions.loadPage.error pageNumber, error
+        _loadTotal: ->
+            Work.count composer_id:@_composerId
 
-        onLoadPageError: (pageNumber, error)->
-            @_error = error
-            @trigger EVENT.ERROR, pageNumber
-            ErrorActions.addError error
-
-        onLoadPageSuccess: (pageNumber, data)->
-            @_page = new Page pageNumber, data.totalPages, data.list
-            @trigger EVENT.CHANGE, pageNumber
-
-        onNextPage: ->
-            if @_page?
-                return unless @_page.hasNextPage()
-                pageNumber = @_page.pageNumber + 1
-            else
-                pageNumber = 0
-
-            WorkListActions.loadPage pageNumber
-
-        onPrevPage: ->
-            if @_page?
-                return unless @_page.hasPrevPage()
-                pageNumber = @_page.pageNumber - 1
-            else
-                pageNumber = 0
-
-            WorkListActions.loadPage pageNumber
+        _loadList: (offset, limit)->
+            Work.findAll composer_id:@_composerId, offset:offset, limit:limit
+                .then (models)->
+                    return (m.toReadOnlyView() for m in models)
