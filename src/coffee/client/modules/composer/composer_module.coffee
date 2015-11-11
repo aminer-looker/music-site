@@ -8,7 +8,7 @@ _       = require 'underscore'
 
 ############################################################################################################
 
-composerModule = angular.module 'composer', ['page', 'reflux', 'schema']
+composerModule = angular.module 'composer', ['mixins', 'page', 'reflux', 'schema']
 
 require './composer_list_controller'
 require './composer_list_item_directive'
