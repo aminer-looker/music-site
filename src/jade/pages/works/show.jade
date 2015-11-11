@@ -1,0 +1,42 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+extends ../../layouts/basic
+
+block content
+    #work-show(ng-controller='WorkModelController as controller')
+        .navigation(ng-show='work.composer.id')
+            a(href='/composers/{{work.composer.id}}' target='_self') « back to composer page
+
+        error-display
+
+        .header(class='ng-cloak' ng-show='work.title')
+            h1 {{work.title}}
+            a(href='http://classicalmusicdb.com{{work.url}}') see on ClassicalMusic DB
+
+        .detail
+            ul
+                li
+                    span.key instrumentation
+                    span.value {{work.instrument.name}}
+                    span.unknown(ng-hide='work.instrument.name')
+                li
+                    span.key type
+                    span.value {{work.type.name}}
+                    span.unknown(ng-hide='work.type.name')
+                li
+                    span.key composed
+                    span.value {{work.composed_year}}
+                    span.unknown(ng-hide='work.composed_year')
+                li
+                    span.key difficulty
+                    span.value {{work.difficulty}}
+                    span.unknown(ng-hide='work.difficulty')
+
+        .controls
+            input(type='button' ng-click='beginEditing()' value='Edit')
+
+        dialog(name='{{dialogName}}', state='closed', title='{{dialogTitle}}')
+            work-editor(id='work.id')

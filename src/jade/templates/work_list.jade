@@ -1,0 +1,22 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+ul(ng-show='page')
+    li(ng-repeat='work in page.list')
+        a(class='ng-cloak' href='{{work.detail_url}}' target='_self') {{work.title}}
+
+    .button-row
+        input(
+            ng-class='page.hasPrevPage() ? "" : "disabled"'
+            ng-click="prevPage()"
+            type='button'
+            value='prev'
+        )
+        input(
+            ng-class='page.hasNextPage() ? "" : "disabled"'
+            ng-click='nextPage()'
+            type='button'
+            value='next'
+        )

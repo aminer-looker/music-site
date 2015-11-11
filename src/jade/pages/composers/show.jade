@@ -1,0 +1,20 @@
+//-
+//- Copyright (C) 2015 by Looker Data Services, Inc.
+//- All rights reserved.
+//-
+
+extends ../../layouts/basic
+
+block content
+    #composer-show(ng-controller='ComposerModelController as controller')
+        .navigation
+            a(href='/composers/' target='_self') « back to composer list
+
+        .header(class='ng-cloak' ng-show='composer.full_name')
+            h1 {{composer.full_name}}
+            a(href='http://classicalmusicdb.com{{composer.url}}') see on ClassicalMusic DB
+
+        work-list
+
+        .error(class='ng-cloak' ng-show='error')
+            pre {{error}}

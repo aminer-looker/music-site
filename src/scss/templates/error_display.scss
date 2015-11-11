@@ -1,0 +1,33 @@
+/*
+ * Copyright (C) 2015 by Looker Data Services, Inc.
+ * All rights reserved.
+ */
+
+error-display {
+    .content {
+        background: $color-red-error-background;
+        border: 0.2rem solid $color-red-error;
+        border-radius: 1rem;
+        font-family: $font-family-control;
+        font-size: $font-size-large;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        position: relative;
+
+        .close {
+            position: absolute; top: 0.5rem; right: 0.5rem;
+            height: 2rem; width: 2rem;
+
+            img {
+                height: 100%; max-width: 100%;
+            }
+        }
+
+        .stacktrace {
+            font-family: monospace;
+            font-size: $font-size-medium;
+            margin-left: 3rem;
+            margin-top: 2rem;
+        }
+    }
+}
