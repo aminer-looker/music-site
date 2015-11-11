@@ -9,6 +9,9 @@ _ = require 'underscore'
 
 module.exports = class ReadOnlyView
 
+    # Creates a new ReadOnlyView which proxies a given list of fields from the given source object.  The source
+    # object can be any object at all.  The remaining arguments should either be strings or arrays of strings which
+    # correspond to fields on the source object.
     constructor: (source, fields...)->
         if fields.length is 0 then throw new Error 'at least one field must be provided'
         @_actions = {}
@@ -27,11 +30,24 @@ module.exports = class ReadOnlyView
 
     # Public Methods ##################################################################
 
+    # Register an action to be invoked when a given field is changed.  Instead of throwing an exception, the setter
+    # for that field will fire the given action with the following parameters:
+    #
+    #  * this read-only view object
+    #  * the name of the field which changed
+    #  * the proposed value of the field
+    #  * a `commit` function which may be called with an accepted value
+    #
+    # If the `commit` function is called, the given value will replace the one currently in this view's cache.  It
+    # *will not* update the underlying source object.  Future references to the field will return the new value. To
+    # update the source object, you'll need to update the source object directly.
     setAction: (field, action)->
         if not @hasOwnProperty(field) then throw new Error "this view does not have a #{field} property"
         if not _.isFunction(action) then throw new Error "action must be a function"
         @_actions[field] = action
 
+    # Register multiple actions to be invoked when various fields are changed.  See the documentation for the
+    # `setAction` method for full details.
     setActions: (hash)->
         for field, action of hash
             @setAction field, action
