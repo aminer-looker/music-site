@@ -36,8 +36,6 @@ module.exports = class ReadOnlyView
         for field, action of hash
             @setAction field, action
 
-    updateCache: (field, value, key)->
-
     # Private Methods #################################################################
 
     _convertObject: (object)->
