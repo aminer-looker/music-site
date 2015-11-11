@@ -9,6 +9,14 @@ _       = require '../../../underscore'
 
 ############################################################################################################
 
+angular.module('mixins').factory 'EditorStoreMixinActions', (reflux)->
+    reflux.createActions
+        beginEditing: { children: ['success', 'error'] }
+        save: { children: ['success', 'error']}
+        cancel: {}
+
+############################################################################################################
+
 angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
 
     init: ->

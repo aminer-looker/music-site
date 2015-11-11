@@ -13,13 +13,9 @@ ACTION_NAMES = _.object([field, "set#{_.camelize(field)}"] for field in FIELDS)
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkEditorActions', (reflux)->
-    actions = reflux.createActions
-        beginEditing: { children: ['success', 'error'] }
-        save: { children: ['success', 'error']}
-        cancel: {}
-
-    _.extend actions, reflux.createActions (ACTION_NAMES[field] for field in FIELDS)
+angular.module('work').factory 'WorkEditorActions', (EditorStoreMixinActions, reflux)->
+    fieldActions = reflux.createActions (ACTION_NAMES[field] for field in FIELDS)
+    return _.extend {}, EditorStoreMixinActions, fieldActions
 
 ############################################################################################################
 
