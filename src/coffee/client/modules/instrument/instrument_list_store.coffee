@@ -29,7 +29,6 @@ angular.module('instrument').factory 'InstrumentListStore', (
             return @_error
 
         onLoadAll: ->
-            console.log "InstrumentListStore.onLoadAll()"
             Instrument.findAll()
                 .then (instruments)->
                     InstrumentListActions.loadAll.success (i.toReadOnlyView() for i in instruments)
@@ -37,12 +36,10 @@ angular.module('instrument').factory 'InstrumentListStore', (
                     InstrumentListActions.loadAll.error error
 
         onLoadAllSuccess: (instruments)->
-            console.log "InstrumentListStore.onLoadSuccess(#{JSON.stringify(instruments)})"
             @_instruments = instruments
             @trigger EVENT.CHANGE
 
         onLoadAllError: (error)->
-            console.log "InstrumentListStore.onLoadAllError(#{error})"
             @_error = error
             @trigger EVENT.ERROR
             ErrorActions.addError error

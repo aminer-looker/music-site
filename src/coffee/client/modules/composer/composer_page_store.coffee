@@ -8,26 +8,26 @@ _       = require '../../../underscore'
 
 ############################################################################################################
 
-angular.module('composer').factory 'ComposerListActions', (ListStoreMixinActions)->
-    return _.extend {}, ListStoreMixinActions
+angular.module('composer').factory 'ComposerPageActions', (PageStoreMixinActions)->
+    return _.extend {}, PageStoreMixinActions
 
 ############################################################################################################
 
-angular.module('composer').factory 'ComposerListStore', (
-    Composer, ComposerListActions, ListStoreMixin, reflux
+angular.module('composer').factory 'ComposerPageStore', (
+    Composer, ComposerPageActions, PageStoreMixin, reflux
 )->
     reflux.createStore
 
         init: ->
-            @_actions = ComposerListActions
-            @listenToMany ComposerListActions
+            @_actions = ComposerPageActions
+            @listenToMany ComposerPageActions
 
-        mixins: [ListStoreMixin]
+        mixins: [PageStoreMixin]
 
-        # ListStoreMixin Methods #######################################################
+        # PageStoreMixin Methods #######################################################
 
         _loadTotal: ->
             Composer.count()
 
-        _loadList: (offset, limit)->
+        _loadPageList: (offset, limit)->
             Composer.findAll offset:offset, limit:limit

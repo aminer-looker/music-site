@@ -33,7 +33,6 @@ angular.module('error').factory 'ErrorStore', ($timeout, ErrorActions, reflux)->
             return @_errors[..]
 
         onAddError: (error, timeout=null)->
-            console.log "ErrorStore.onAddError(#{error}, #{timeout})"
             timeout ?= ERROR_DISPLAY_TIME
 
             error.id = getNextErrorId()
@@ -46,7 +45,6 @@ angular.module('error').factory 'ErrorStore', ($timeout, ErrorActions, reflux)->
                 $timeout (-> ErrorActions.removeError error.id), timeout
 
         onRemoveError: (id)->
-            console.log "ErrorStore.onRemoveError(#{id})"
             @_errors = _.filter @_errors, (error)-> error.id isnt id
 
             @trigger EVENT.REMOVE, id

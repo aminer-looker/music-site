@@ -35,25 +35,21 @@ angular.module('dialog').factory 'DialogStore', (DialogActions, reflux)->
         onRegister: (name, state, title)->
             if not state in [DIALOG_STATE.OPEN, DIALOG_STATE.CLOSED]
                 throw new Error "invalid dialog state: \"#{state}\""
-            console.log "DialogStore.onRegister(#{name}, #{state}, #{title})"
 
             @_data[name] = state:state, title:(title or '')
             @trigger EVENT.CHANGE, name
 
         onOpen: (name)->
-            console.log "DialogStore.onOpen(#{name})"
             @_data[name] ?= state:DIALOG_STATE.OPEN, title:''
             @_data[name].state = DIALOG_STATE.OPEN
             @trigger EVENT.CHANGE, name
 
         onClose: (name)->
-            console.log "DialogStore.onClose(#{name})"
             @_data[name] ?= state:DIALOG_STATE.CLOSED, title:''
             @_data[name].state = DIALOG_STATE.CLOSED
             @trigger EVENT.CHANGE, name
 
         onSetTitle: (name, title)->
-            console.log "DialogStore.onSetTitle(#{name}, #{title})"
             @_data[name] ?= state:DIALOG_STATE.CLOSED, title:''
             @_data[name].title = (title or '')
             @trigger EVENT.CHANGE, name

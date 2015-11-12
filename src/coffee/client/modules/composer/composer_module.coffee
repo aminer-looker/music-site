@@ -10,11 +10,10 @@ _       = require 'underscore'
 
 composerModule = angular.module 'composer', ['mixins', 'page', 'reflux', 'schema']
 
-require './composer_list_controller'
-require './composer_list_item_directive'
-require './composer_list_store'
 require './composer_model_controller'
 require './composer_model_store'
+require './composer_page_controller'
+require './composer_page_store'
 
-composerModule.factory 'ComposerActions', (ComposerListActions, ComposerModelActions)->
-    _.extend {}, ComposerListActions, ComposerModelActions
+composerModule.factory 'ComposerActions', (ComposerModelActions, ComposerPageActions)->
+    _.extend {}, ComposerModelActions, ComposerPageActions

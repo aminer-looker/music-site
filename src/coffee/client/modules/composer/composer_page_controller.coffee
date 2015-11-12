@@ -7,11 +7,11 @@ angular = require 'angular'
 
 ############################################################################################################
 
-angular.module('composer').controller 'ComposerListController', (
-    $scope, ComposerActions, ComposerListStore
+angular.module('composer').controller 'ComposerPageController', (
+    $scope, ComposerActions, ComposerPageStore
 )->
-    ComposerListStore.$listen $scope, (event, id)->
-        $scope.composerPage = ComposerListStore.get id
+    ComposerPageStore.$listen $scope, (event, id)->
+        $scope.composerPage = ComposerPageStore.get id
 
     $scope.nextPage = ->
         ComposerActions.nextPage()

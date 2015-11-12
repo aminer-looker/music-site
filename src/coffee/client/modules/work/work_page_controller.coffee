@@ -7,11 +7,11 @@ angular = require 'angular'
 
 ############################################################################################################
 
-angular.module('work').controller 'WorkListController', (
-    $scope, WorkListStore, WorkActions
+angular.module('work').controller 'WorkPageController', (
+    $scope, WorkPageStore, WorkActions
 )->
-    WorkListStore.$listen $scope, (event, pageNumber)->
-        $scope.page = WorkListStore.get()
+    WorkPageStore.$listen $scope, (event, pageNumber)->
+        $scope.page = WorkPageStore.get()
 
     $scope.nextPage = ->
         WorkActions.nextPage()

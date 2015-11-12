@@ -8,8 +8,9 @@ templates = require '../../templates'
 
 ############################################################################################################
 
-angular.module('composer').directive 'composerListItem', ->
-    restrict: 'C'
-    scope:
-        composer: '='
-    template: templates['composer_list_item']
+angular.module('work').directive 'workPage', ->
+    controller: 'WorkPageController'
+    controllerAs: 'controller'
+    restrict: 'E'
+    scope: {}
+    template: templates['work_page']

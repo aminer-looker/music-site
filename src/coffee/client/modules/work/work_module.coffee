@@ -23,11 +23,11 @@ workModule = angular.module 'work', [
 require './work_editor_controller'
 require './work_editor_directive'
 require './work_editor_store'
-require './work_list_controller'
-require './work_list_directive'
-require './work_list_store'
 require './work_model_controller'
 require './work_model_store'
+require './work_page_controller'
+require './work_page_directive'
+require './work_page_store'
 
-workModule.factory 'WorkActions', (WorkEditorActions, WorkListActions, WorkModelActions)->
-    _.extend {}, WorkEditorActions, WorkListActions, WorkModelActions
+workModule.factory 'WorkActions', (WorkEditorActions, WorkPageActions, WorkModelActions)->
+    _.extend {}, WorkEditorActions, WorkPageActions, WorkModelActions

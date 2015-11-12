@@ -27,7 +27,6 @@ angular.module('type').factory 'TypeListStore', (ErrorActions, Type, TypeListAct
             return @_error
 
         onLoadAll: ->
-            console.log "TypeListStore.onLoadAll()"
             Type.findAll()
                 .then (types)->
                     TypeListActions.loadAll.success (i.toReadOnlyView() for i in types)
@@ -35,12 +34,10 @@ angular.module('type').factory 'TypeListStore', (ErrorActions, Type, TypeListAct
                     TypeListActions.loadAll.error error
 
         onLoadAllSuccess: (types)->
-            console.log "TypeListStore.onLoadSuccess(#{JSON.stringify(types)})"
             @_types = types
             @trigger EVENT.CHANGE
 
         onLoadAllError: (error)->
-            console.log "TypeListStore.onLoadAllError(#{error})"
             @_error = error
             @trigger EVENT.ERROR
             ErrorActions.addError error

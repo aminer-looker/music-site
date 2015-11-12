@@ -9,7 +9,7 @@ angular     = require 'angular'
 
 ############################################################################################################
 
-angular.module('mixins').factory 'ListStoreMixinActions', (reflux)->
+angular.module('mixins').factory 'PageStoreMixinActions', (reflux)->
     reflux.createActions
         loadPage: { children: ['success', 'error'] }
         nextPage: {}
@@ -17,8 +17,8 @@ angular.module('mixins').factory 'ListStoreMixinActions', (reflux)->
 
 ############################################################################################################
 
-angular.module('mixins').factory 'ListStoreMixin', (
-    $q, ErrorActions, Page, reflux, Work, WorkListActions
+angular.module('mixins').factory 'PageStoreMixin', (
+    $q, ErrorActions, Page, reflux, Work, WorkPageActions
 )->
     # Public Methods ###################################################################
 
@@ -40,13 +40,13 @@ angular.module('mixins').factory 'ListStoreMixin', (
     _loadTotal: ->
         # Users of this mixin must override this method to fetch the total number of objects across all
         # possible pages.  It should return a promise which resolves to that number.
-        throw new Error 'ListStoreMixin requires you to implement _loadTotal'
+        throw new Error 'PageStoreMixin requires you to implement _loadTotal'
 
-    _loadList: (offset, limit)->
+    _loadPageList: (offset, limit)->
         # Users of this mixin must override this method to fetch the given range of objects. It should
         # return a promise which resolves to the requested list. The given objects should be in whatever
         # form is property to expose to the view layer.
-        throw new Error 'ListStoreMixin requires you to implement _loadList'
+        throw new Error 'PageStoreMixin requires you to implement _loadPageList'
 
     # Action Methods ###################################################################
 
@@ -69,7 +69,7 @@ angular.module('mixins').factory 'ListStoreMixin', (
                 total  = count
                 offset = pageNumber * PAGE_SIZE
                 limit  = PAGE_SIZE
-                @_loadList offset, limit
+                @_loadPageList offset, limit
             .then (list)=>
                 totalPages = Math.ceil total / PAGE_SIZE
                 @_actions.loadPage.success pageNumber, {totalPages:totalPages, list:list}

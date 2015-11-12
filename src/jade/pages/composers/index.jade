@@ -6,11 +6,14 @@
 extends ../../layouts/basic
 
 block content
-    #composers-index(ng-controller='ComposerListController as controller')
+    #composers-index(ng-controller='ComposerPageController as controller')
         h1 Pick a composer to explore.
         .composer-list
             ul(ng-show='composerPage')
-                li(class='composer-list-item' composer='composer' ng-repeat='composer in composerPage.list')
+                li(class='composer-list-item' ng-repeat='composer in composerPage.list')
+                    a(href='{{composer.detail_url}}')
+                        | <span class="first-name">{{composer.last_name}}</span><span class="last-name">,
+                        | {{composer.first_name}}</span>
             .button-row
                 input(
                     ng-class='composerPage.hasPrevPage() ? "" : "disabled"'
