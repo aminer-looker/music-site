@@ -17,9 +17,8 @@ angular.module('type').factory 'TypeListStore', (
     Type, TypeListActions, ListStoreMixin, reflux
 )->
     reflux.createStore
-        init: ->
-            @_actions = TypeListActions
-            @listenToMany @_actions
+
+        listenables: TypeListActions
 
         mixins: [ListStoreMixin]
 

@@ -20,6 +20,17 @@ angular.module('mixins').factory 'addListStoreMixinActions', (reflux)->
 angular.module('mixins').factory 'ListStoreMixin', (
     ErrorActions, reflux
 )->
+    init: ->
+        allActions = _.gatherProperties @listenables
+
+        if not allActions.loadAll?.error?
+            throw new Error 'ListStoreMixin requires a loadAll.error action'
+        if not allActions.loadAll?.success?
+            throw new Error 'ListStoreMixin requires a loadAll.success action'
+
+        @_fireLoadAllError   = allActions.loadAll.error
+        @_fireLoadAllSuccess = allActions.loadAll.success
+
     # Public Methods ###################################################################
 
     getAll: ->
@@ -39,14 +50,11 @@ angular.module('mixins').factory 'ListStoreMixin', (
     # Actions Methods ##################################################################
 
     onLoadAll: ->
-        if not @_actions?.loadAll?.success? then throw new Error '_actions.loadAll.success is required'
-        if not @_actions?.loadAll?.error? then throw new Error '_actions.loadAll.error is required'
-
         @_loadAll()
             .then (models)=>
-                @_actions.loadAll.success models
+                @_fireLoadAllSuccess models
             .catch (error)=>
-                @_actions.loadAll.error error
+                @_fireLoadAllError error
 
     onLoadAllError: (error)->
         @_error = error

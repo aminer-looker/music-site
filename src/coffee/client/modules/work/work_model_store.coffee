@@ -23,16 +23,13 @@ angular.module('work').factory 'WorkModelStore', (
                 return unless @_model? and id is @_model.id
                 WorkModelActions.load id
 
-            @_actions = WorkModelActions
-            @listenToMany @_actions
+        listenables: WorkModelActions
 
         mixins: [ModelStoreMixin]
 
         # ModelStoreMixin Overrides ####################################################
 
         _loadModel: (id)->
-            relations = ['composer', 'instrument', 'type']
-
             Work.find id
                 .then (work)->
-                    Work.loadRelations work, relations
+                    Work.loadRelations work, ['composer', 'instrument', 'type']

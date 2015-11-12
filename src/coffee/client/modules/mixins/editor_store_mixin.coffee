@@ -11,8 +11,12 @@ ReadOnlyView = require '../../../read_only_view'
 ############################################################################################################
 
 angular.module('mixins').factory 'addEditorStoreMixinActions', (reflux)->
-    return (actions)->
-        _.extend actions, reflux.createActions
+    return (actions, fields)->
+        fieldActions = {}
+        for field in fields
+            fieldActions["set#{_.camelize(field)}"] = reflux.createAction fieldName:field
+
+        return _.extend actions, fieldActions, reflux.createActions
             beginEditing: { children: ['success', 'error'] }
             save: { children: ['success', 'error']}
             cancel: {}
@@ -28,18 +32,28 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         @_model            = null
         @_view             = null
 
-        for field, action of @_getUpdateActions()
-            this["onSet#{_.camelize(field)}"] = (view, field, value, commit)=>
+        allActions = _.gatherProperties @listenables
+
+        if not allActions.beginEditing?.error?
+            throw new Error 'EditorStoreMixin requires a beginEditing.error action'
+        if not allActions.beginEditing?.success?
+            throw new Error 'EditorStoreMixin requires a beginEditing.success action'
+        if not allActions.save?.error?
+            throw new Error 'EditorStoreMixin requires a save.error action'
+        if not allActions.save?.success?
+            throw new Error 'EditorStoreMixin requires a save.success action'
+
+        for actionName, action of allActions
+            continue unless action.fieldName?
+            this["onSet#{_.camelize(action.fieldName)}"] = (view, field, value, commit)=>
                 @_onFieldChanged view, field, value, commit
 
-    # Override Methods #################################################################
+        @_fireBeginEditingError   = allActions.beginEditing.error
+        @_fireBeginEditingSuccess = allActions.beginEditing.success
+        @_fireSavegError          = allActions.save.error
+        @_fireSaveSuccess         = allActions.save.success
 
-    _getUpdateActions: ->
-        # Subclasses must override this method to return a hash mapping fields on the model to the actions
-        # which should be fired when those fields are updated.  The view's `setActions` method will be
-        # called with the hash, and a set of action methods will be added to this store which correspond to
-        # those actions.
-        throw new Error 'EditorStoreMixin requires _getUpdateActions'
+    # Override Methods #################################################################
 
     _loadModel: (id)->
         # Subclasses must override this method to return a promise of the model object specified by the
@@ -54,10 +68,10 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         throw new Error 'EditorStoreMixin requires _saveModel'
 
     # _validate<FieldName>(value, errors)->
-    #     # Subclasses may add validation methods for each field specified in `_getUpdateActions`.  If such
-    #     # a method exists, it will be called whenever the associated field changes.  If any validation
-    #     # errors are detected, they may be pushed into the `errors` array.  The subclass must return the
-    #     # new value to be used for the field (even if it's just to return the same `value`).
+    #     # Subclasses may add validation methods for each "set..." action in this store's listenables.  If
+    #     # such a method exists, it will be called whenever the associated field changes.  If any
+    #     # validation errors are detected, they may be pushed into the `errors` array.  The subclass must
+    #     # return the new value to be used for the field (even if it's just to return the same `value`).
     #
     #     if parseInt(value) % 2 is 1 then errors.push 'no odd numbers!'
     #     return value
@@ -92,19 +106,14 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
     # Action Methods ###################################################################
 
     onBeginEditing: (id)->
-        if not @_actions?.beginEditing?.success?
-            throw new Error '_actions.beginEditing.success is required'
-        if not @_actions?.beginEditing?.error?
-            throw new Error '_actions.beginEditing.error is required'
-
         return unless id?
 
         @_isEditing = false
         @_loadModel id
             .then (model)=>
-                @_actions.beginEditing.success id, model
+                @_fireBeginEditingSuccess id, model
             .catch (error)=>
-                @_actions.beginEditing.error id, error
+                @_fireBeginEditingError id, error
 
     onBeginEditingError: (id, error)->
         @_error = error
@@ -120,8 +129,9 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         @_model            = model
         @_view             = ReadOnlyView.convertObject model
 
-        if _.isFunction @_getUpdateActions
-            @_view.setActions @_getUpdateActions()
+        for actionName, action of _.gatherProperties @listenables
+            continue unless action.fieldName?
+            @_view.setAction action.fieldName, action
 
         @trigger EVENT.ERROR, id
         @trigger EVENT.INVALID, id
@@ -135,15 +145,20 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         @trigger EVENT.DONE, @_view.id
 
     onSave: ->
-        if not @_actions?.save?.success? then throw new Error '_actions.save.success is required'
-        if not @_actions?.save?.error? then throw new Error '_actions.save.error is required'
         return unless @isEditing()
 
         @_saveModel @_view, @_model
             .then =>
-                @_actions.save.success @_view.id, @_view
+                @_fireSaveSuccess @_view.id, @_view
             .catch (error)=>
-                @_actions.save.error @_view.id, error
+                @_fireSaveError @_view.id, error
+
+    onSaveError: (id, error)->
+        @_error = error
+
+        @trigger EVENT.ERROR, id
+        @trigger EVENT.DONE, id
+        ErrorActions.addError error
 
     onSaveSuccess: (id, view)->
         @_error     = null
@@ -152,13 +167,6 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         @trigger EVENT.ERROR, id
         @trigger EVENT.SAVE, id
         @trigger EVENT.DONE, id
-
-    onSaveError: (id, error)->
-        @_error = error
-
-        @trigger EVENT.ERROR, id
-        @trigger EVENT.DONE, id
-        ErrorActions.addError error
 
     # Private Methods ##################################################################
 

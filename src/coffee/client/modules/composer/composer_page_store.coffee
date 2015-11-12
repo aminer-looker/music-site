@@ -18,9 +18,7 @@ angular.module('composer').factory 'ComposerPageStore', (
 )->
     reflux.createStore
 
-        init: ->
-            @_actions = ComposerPageActions
-            @listenToMany ComposerPageActions
+        listenables: ComposerPageActions
 
         mixins: [PageStoreMixin]
 

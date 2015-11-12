@@ -23,6 +23,20 @@ angular.module('mixins').factory 'addPageStoreMixinActions', (reflux)->
 angular.module('mixins').factory 'PageStoreMixin', (
     $q, ErrorActions, Page
 )->
+    init: ->
+        allActions = _.gatherProperties @listenables
+
+        if not allActions.loadPage?
+            throw new Error 'PageStoreMixin requires a loadPage action'
+        if not allActions.loadPage?.error?
+            throw new Error 'PageStoreMixin requires a loadPage.error action'
+        if not allActions.loadPage?.success?
+            throw new Error 'PageStoreMixin requires a loadPage.success action'
+
+        @_fireLoadPage        = allActions.loadPage
+        @_fireLoadPageError   = allActions.loadPage.error
+        @_fireLoadPageSuccess = allActions.loadPage.success
+
     # Public Methods ###################################################################
 
     get: ->
@@ -54,11 +68,6 @@ angular.module('mixins').factory 'PageStoreMixin', (
     # Action Methods ###################################################################
 
     onLoadPage: (pageNumber)->
-        if not @_actions.loadPage?.success?
-            throw new Error 'PageStoreMixin requires _actions.loadPage.success'
-        if not @_actions.loadPage?.error?
-            throw new Error 'PageStoreMixin requires _actions.loadpage.error'
-
         return unless @_canLoad()
 
         pageNumber ?= 0
@@ -75,9 +84,9 @@ angular.module('mixins').factory 'PageStoreMixin', (
                 @_loadPageList offset, limit
             .then (list)=>
                 totalPages = Math.ceil total / PAGE_SIZE
-                @_actions.loadPage.success pageNumber, {totalPages:totalPages, list:list}
+                @_fireLoadPageSuccess pageNumber, {totalPages:totalPages, list:list}
             .catch (error)=>
-                @_actions.loadPage.error pageNumber, error
+                @_fireLoadPageError pageNumber, error
 
     onLoadPageError: (pageNumber, error)->
         @_error = error
@@ -89,23 +98,19 @@ angular.module('mixins').factory 'PageStoreMixin', (
         @trigger EVENT.CHANGE, pageNumber
 
     onNextPage: ->
-        if not @_actions.loadPage? then throw new Error 'PageStoreMixin requires _actions.loadPage'
-
         if @_page?
             return unless @_page.hasNextPage()
             pageNumber = @_page.pageNumber + 1
         else
             pageNumber = 0
 
-        @_actions.loadPage pageNumber
+        @_fireLoadPage pageNumber
 
     onPrevPage: ->
-        if not @_actions.loadPage? then throw new Error 'PageStoreMixin requires _actions.loadPage'
-
         if @_page?
             return unless @_page.hasPrevPage()
             pageNumber = @_page.pageNumber - 1
         else
             pageNumber = 0
 
-        @_actions.loadPage pageNumber
+        @_fireLoadPage pageNumber

@@ -6,3 +6,10 @@
 module.exports = _ = require 'underscore'
 
 _.mixin require 'underscore.inflections'
+
+_.mixin
+    gatherProperties: (dest, sources...)->
+        sources = _.flatten [sources]
+        for source in sources
+            _.extend dest, source
+        return dest

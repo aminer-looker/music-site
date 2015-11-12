@@ -17,9 +17,8 @@ angular.module('instrument').factory 'InstrumentListStore', (
     Instrument, InstrumentListActions, ListStoreMixin, reflux
 )->
     reflux.createStore
-        init: ->
-            @_actions = InstrumentListActions
-            @listenToMany @_actions
+
+        listenables: InstrumentListActions
 
         mixins: [ListStoreMixin]
 

@@ -17,9 +17,8 @@ angular.module('composer').factory 'ComposerModelStore', (
     Composer, ComposerModelActions, ModelStoreMixin, reflux
 )->
     reflux.createStore
-        init: ->
-            @_actions = ComposerModelActions
-            @listenToMany @_actions
+
+        listenables: ComposerModelActions
 
         mixins: [ModelStoreMixin]
 

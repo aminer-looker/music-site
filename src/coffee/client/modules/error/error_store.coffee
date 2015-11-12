@@ -39,7 +39,7 @@ angular.module('error').factory 'ErrorStore', ($timeout, ErrorActions, reflux)->
             @_errors.unshift error
 
             @trigger EVENT.ADD, error.id
-            @trigger EVENT.CHANGE, error.id
+            @trigger EVENT.CHANGE
 
             if timeout > 0
                 $timeout (-> ErrorActions.removeError error.id), timeout
@@ -48,4 +48,4 @@ angular.module('error').factory 'ErrorStore', ($timeout, ErrorActions, reflux)->
             @_errors = _.filter @_errors, (error)-> error.id isnt id
 
             @trigger EVENT.REMOVE, id
-            @trigger EVENT.CHANGE, id
+            @trigger EVENT.CHANGE

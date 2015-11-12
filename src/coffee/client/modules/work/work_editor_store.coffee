@@ -8,14 +8,10 @@ _       = require '../../../underscore'
 
 ############################################################################################################
 
-FIELDS = ['composed_year', 'difficulty', 'instrument_id', 'type_id']
-ACTION_NAMES = _.object([field, "set#{_.camelize(field)}"] for field in FIELDS)
-
-############################################################################################################
-
 angular.module('work').factory 'WorkEditorActions', (addEditorStoreMixinActions, reflux)->
-    fieldActions = reflux.createActions (ACTION_NAMES[field] for field in FIELDS)
-    return addEditorStoreMixinActions fieldActions
+    return addEditorStoreMixinActions {}, [
+        'composed_year', 'difficulty', 'instrument_id', 'type_id'
+    ]
 
 ############################################################################################################
 
@@ -25,22 +21,14 @@ angular.module('work').factory 'WorkEditorStore', (
 )->
     reflux.createStore
         init: ->
-            @_actions = WorkEditorActions
-            @listenToMany @_actions
-
             InstrumentActions.loadAll()
             TypeActions.loadAll()
+
+        listenables: WorkEditorActions
 
         mixins: [EditorStoreMixin]
 
         # EditorWorkStore Overrides ####################################################
-
-        _getUpdateActions: ->
-            fields = ['composed_year', 'difficulty', 'instrument_id', 'type_id']
-            result = {}
-            for field in fields
-                result[field] = WorkEditorActions["set#{_.camelize(field)}"]
-            return result
 
         _loadModel: (id)->
             return Work.find id

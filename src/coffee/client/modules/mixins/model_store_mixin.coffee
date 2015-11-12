@@ -20,6 +20,16 @@ angular.module('mixins').factory 'addModelStoreMixinActions', (reflux)->
 angular.module('mixins').factory 'ModelStoreMixin', (
     ErrorActions, reflux
 )->
+    init: ->
+        allActions = _.gatherProperties @listenables
+
+        if not allActions.load?.success?
+            throw new Error 'ModelStoreMixin requires a load.success action'
+        if not allActions.load?.error?
+            throw new Error 'ModelStoreMixin requires a load.error action'
+
+        @_fireLoadSuccess = allActions.load.success
+        @_fireLoadError = allActions.load.error
 
     # Public Methods ###################################################################
 
@@ -40,14 +50,11 @@ angular.module('mixins').factory 'ModelStoreMixin', (
     # Action Methods ###################################################################
 
     onLoad: (id)->
-        if not @_actions.load?.success? then throw new Error '_actions.load.success is required'
-        if not @_actions.load?.error? then throw new Error '_actions.load.error is required'
-
         @_loadModel id
             .then (model)=>
-                @_actions.load.success id, model
+                @_fireLoadSuccess id, model
             .catch (error)=>
-                @_actions.load.error id, error
+                @_fireLoadError id, error
 
     onLoadError: (id, error)->
         @_error = error

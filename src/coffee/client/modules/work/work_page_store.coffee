@@ -26,8 +26,7 @@ angular.module('work').factory 'WorkPageStore', (
 
             @_composerId = null
 
-            @_actions = WorkPageActions
-            @listenToMany @_actions
+        listenables: WorkPageActions
 
         mixins: [PageStoreMixin]
 
