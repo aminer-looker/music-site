@@ -4,43 +4,29 @@
 #
 
 angular = require 'angular'
+_       = require '../../../underscore'
 {EVENT} = require '../../../constants'
 
 ############################################################################################################
 
-angular.module('composer').factory 'ComposerModelActions', (reflux)->
-    reflux.createActions
-        load: { children: ['success', 'error'] }
+angular.module('composer').factory 'ComposerModelActions', (ModelStoreMixinActions)->
+    return _.extend {}, ModelStoreMixinActions
 
 ############################################################################################################
 
 angular.module('composer').factory 'ComposerModelStore', (
-    Composer, ComposerModelActions, ErrorActions, reflux
+    Composer, ComposerModelActions, ModelStoreMixin, reflux
 )->
     reflux.createStore
         init: ->
-            @_composer = null
-            @_error = null
+            @_actions = ComposerModelActions
             @listenToMany ComposerModelActions
 
-        get: ->
-            return @_composer
+        mixins: [ModelStoreMixin]
 
-        getError: ->
-            return @_error
+        # ModelStoreMixin Methods ######################################################
 
-        onLoad: (id)->
+        _loadModel: (id)->
             Composer.find id
-                .then (composer)=>
-                    ComposerModelActions.load.success id, composer.toReadOnlyView()
-                .catch (error)->
-                    ComposerModelActions.load.error id, error
-
-        onLoadSuccess: (id, composer)->
-            @_composer = composer
-            @trigger EVENT.CHANGE, id
-
-        onLoadError: (id, error)->
-            @_error = error
-            @trigger EVENT.ERROR, id
-            ErrorActions.addError error
+                .then (composer)->
+                    return composer.toReadOnlyView()

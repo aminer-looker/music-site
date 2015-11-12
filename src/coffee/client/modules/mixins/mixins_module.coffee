@@ -11,3 +11,4 @@ mixinsModule = angular.module 'mixins', []
 
 require './editor_store_mixin'
 require './list_store_mixin'
+require './model_store_mixin'

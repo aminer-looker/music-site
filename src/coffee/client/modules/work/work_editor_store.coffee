@@ -49,6 +49,8 @@ angular.module('work').factory 'WorkEditorStore', (
             return model.DSSave()
 
         _validateComposedYear: (value, errors)->
+            return null unless value?
+
             numberValue = parseInt value
             currentYear = new Date().getFullYear()
             if not _.isNumber(numberValue) then errors.push 'must be a number'
@@ -57,6 +59,8 @@ angular.module('work').factory 'WorkEditorStore', (
             return value
 
         _validateDifficulty: (value, errors)->
+            return null unless value?
+
             numberValue = parseFloat value
             if _.isNaN(numberValue) then errors.push 'must be a number'
             if numberValue < 0 then errors.push 'must be at least 0.00'

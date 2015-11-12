@@ -4,51 +4,38 @@
 #
 
 angular = require 'angular'
+_       = require '../../../underscore'
 {EVENT} = require '../../../constants'
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkModelActions', (reflux)->
-    reflux.createActions
-        load: { children: ['success', 'error'] }
+angular.module('work').factory 'WorkModelActions', (ModelStoreMixinActions)->
+    return _.extend {}, ModelStoreMixinActions
 
 ############################################################################################################
 
 angular.module('work').factory 'WorkModelStore', (
-    ErrorActions, reflux, Work, WorkEditorStore, WorkModelActions
+    ModelStoreMixin, reflux, Work, WorkEditorStore, WorkModelActions
 )->
     reflux.createStore
         init: ->
             WorkEditorStore.listen (event, id)=>
-                console.log "WorkModelStore.WorkEditorStore.listen(#{event}, #{id})"
                 return unless event is EVENT.SAVE
-                return unless @_work? and id is @_work.id
+                return unless @_model? and id is @_model.id
                 WorkModelActions.load id
 
-            @_work = null
-            @listenToMany WorkModelActions
+            @_actions = WorkModelActions
+            @listenToMany @_actions
 
-        get: ->
-            return @_work
+        mixins: [ModelStoreMixin]
 
-        onLoad: (id)->
-            console.log "WorkModelStore.onLoad(#{id})"
+        # ModelStoreMixin Overrides ####################################################
+
+        _loadModel: (id)->
             relations = ['composer', 'instrument', 'type']
 
             Work.find id
                 .then (work)->
                     Work.loadRelations work, relations
                 .then (work)->
-                    WorkModelActions.load.success id, work.toReadOnlyView()
-                .catch (error)->
-                    WorkModelActions.load.error id, error
-
-        onLoadSuccess: (id, work)->
-            console.log "WorkModelStore.onLoadSuccess(#{id}, #{JSON.stringify(work)})"
-            @_work = work
-            @trigger EVENT.CHANGE, id, work
-
-        onLoadError: (id, error)->
-            console.log "WorkModelStore.onLoadError(#{id}, #{JSON.stringify(error)})"
-            @trigger EVENT.ERROR, id, error
-            ErrorActions.addError error
+                    return work.toReadOnlyView()
