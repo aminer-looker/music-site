@@ -13,14 +13,15 @@ ACTION_NAMES = _.object([field, "set#{_.camelize(field)}"] for field in FIELDS)
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkEditorActions', (EditorStoreMixinActions, reflux)->
+angular.module('work').factory 'WorkEditorActions', (addEditorStoreMixinActions, reflux)->
     fieldActions = reflux.createActions (ACTION_NAMES[field] for field in FIELDS)
-    return _.extend {}, EditorStoreMixinActions, fieldActions
+    return addEditorStoreMixinActions fieldActions
 
 ############################################################################################################
 
 angular.module('work').factory 'WorkEditorStore', (
-    EditorStoreMixin, InstrumentActions, reflux, TypeActions, Work, WorkEditorActions
+    EditorStoreMixin, InstrumentActions, InstrumentListStore, reflux, TypeActions, TypeListStore,
+    Work, WorkEditorActions
 )->
     reflux.createStore
         init: ->
@@ -32,7 +33,7 @@ angular.module('work').factory 'WorkEditorStore', (
 
         mixins: [EditorStoreMixin]
 
-        # Private Methods ##############################################################
+        # EditorWorkStore Overrides ####################################################
 
         _getUpdateActions: ->
             fields = ['composed_year', 'difficulty', 'instrument_id', 'type_id']

@@ -8,8 +8,8 @@ _       = require '../../../underscore'
 
 ############################################################################################################
 
-angular.module('composer').factory 'ComposerPageActions', (PageStoreMixinActions)->
-    return _.extend {}, PageStoreMixinActions
+angular.module('composer').factory 'ComposerPageActions', (addPageStoreMixinActions)->
+    return addPageStoreMixinActions {}
 
 ############################################################################################################
 

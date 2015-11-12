@@ -4,13 +4,15 @@
 #
 
 angular = require 'angular'
+_       = require '../../../underscore'
 {EVENT} = require '../../../constants'
 
 ############################################################################################################
 
-angular.module('mixins').factory 'ModelStoreMixinActions', (reflux)->
-    reflux.createActions
-        load: { children: ['success', 'error'] }
+angular.module('mixins').factory 'addModelStoreMixinActions', (reflux)->
+    return (actions)->
+        _.extend actions, reflux.createActions
+            load: { children: ['success', 'error'] }
 
 ############################################################################################################
 

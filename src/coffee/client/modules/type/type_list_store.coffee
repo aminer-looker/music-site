@@ -4,40 +4,28 @@
 #
 
 angular = require 'angular'
-{EVENT} = require '../../../constants'
+_       = require '../../../underscore'
 
 ############################################################################################################
 
-angular.module('type').factory 'TypeListActions', (reflux)->
-    reflux.createActions
-        loadAll: { children: ['success', 'error'] }
+angular.module('type').factory 'TypeListActions', (addListStoreMixinActions)->
+    return addListStoreMixinActions {}
 
 # Stores ###################################################################################################
 
-angular.module('type').factory 'TypeListStore', (ErrorActions, Type, TypeListActions, reflux)->
+angular.module('type').factory 'TypeListStore', (
+    Type, TypeListActions, ListStoreMixin, reflux
+)->
     reflux.createStore
         init: ->
-            @_types = []
-            @listenToMany TypeListActions
+            @_actions = TypeListActions
+            @listenToMany @_actions
 
-        getAll: ->
-            return @_types
+        mixins: [ListStoreMixin]
 
-        getError: ->
-            return @_error
+        # ListStoreMixin Overrides #####################################################
 
-        onLoadAll: ->
-            Type.findAll()
-                .then (types)->
-                    TypeListActions.loadAll.success (i.toReadOnlyView() for i in types)
-                .catch (error)->
-                    TypeListActions.loadAll.error error
-
-        onLoadAllSuccess: (types)->
-            @_types = types
-            @trigger EVENT.CHANGE
-
-        onLoadAllError: (error)->
-            @_error = error
-            @trigger EVENT.ERROR
-            ErrorActions.addError error
+        _loadAll: ->
+            return Type.findAll()
+                .then (models)->
+                    return (m.toReadOnlyView() for m in models)

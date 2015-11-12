@@ -4,42 +4,28 @@
 #
 
 angular = require 'angular'
-{EVENT} = require '../../../constants'
+_       = require '../../../underscore'
 
 ############################################################################################################
 
-angular.module('instrument').factory 'InstrumentListActions', (reflux)->
-    reflux.createActions
-        loadAll: { children: ['success', 'error'] }
+angular.module('instrument').factory 'InstrumentListActions', (addListStoreMixinActions)->
+    return addListStoreMixinActions {}
 
 # Stores ###################################################################################################
 
 angular.module('instrument').factory 'InstrumentListStore', (
-    ErrorActions, Instrument, InstrumentListActions, reflux
+    Instrument, InstrumentListActions, ListStoreMixin, reflux
 )->
     reflux.createStore
         init: ->
-            @_instruments = []
-            @listenToMany InstrumentListActions
+            @_actions = InstrumentListActions
+            @listenToMany @_actions
 
-        getAll: ->
-            return @_instruments
+        mixins: [ListStoreMixin]
 
-        getError: ->
-            return @_error
+        # ListStoreMixin Overrides #####################################################
 
-        onLoadAll: ->
-            Instrument.findAll()
-                .then (instruments)->
-                    InstrumentListActions.loadAll.success (i.toReadOnlyView() for i in instruments)
-                .catch (error)->
-                    InstrumentListActions.loadAll.error error
-
-        onLoadAllSuccess: (instruments)->
-            @_instruments = instruments
-            @trigger EVENT.CHANGE
-
-        onLoadAllError: (error)->
-            @_error = error
-            @trigger EVENT.ERROR
-            ErrorActions.addError error
+        _loadAll: ->
+            return Instrument.findAll()
+                .then (models)->
+                    return (m.toReadOnlyView() for m in models)

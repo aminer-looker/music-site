@@ -9,11 +9,12 @@ _       = require '../../../underscore'
 
 ############################################################################################################
 
-angular.module('mixins').factory 'EditorStoreMixinActions', (reflux)->
-    reflux.createActions
-        beginEditing: { children: ['success', 'error'] }
-        save: { children: ['success', 'error']}
-        cancel: {}
+angular.module('mixins').factory 'addEditorStoreMixinActions', (reflux)->
+    return (actions)->
+        _.extend actions, reflux.createActions
+            beginEditing: { children: ['success', 'error'] }
+            save: { children: ['success', 'error']}
+            cancel: {}
 
 ############################################################################################################
 
@@ -37,28 +38,25 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         # which should be fired when those fields are updated.  The view's `setActions` method will be
         # called with the hash, and a set of action methods will be added to this store which correspond to
         # those actions.
-
-        throw new Error 'subclasses must override _getUpdateActions'
+        throw new Error 'EditorStoreMixin requires _getUpdateActions'
 
     _loadModel: (id)->
         # Subclasses must override this method to return a promise of the model object specified by the
         # given `id`.  The caller can deal with either a "resolved" or "rejected" promise.
-
-        throw new Error 'subclasses must override _loadModel'
+        throw new Error 'EditorStoreMixin requires _loadModel'
 
     _saveModel: (view, model)->
         # Subclasses must override this method to update the model with data given in the view, and then to
         # take whatever steps are necessary to persist that change.  The subclass should then return a
         # a promise of the updated model object.  The caller will be able to deal with either a "resolved"
         # or "rejected" promise.
-
-        throw new Error 'subclasses must override _saveModel'
+        throw new Error 'EditorStoreMixin requires _saveModel'
 
     # _validate<FieldName>(value, errors)->
     #     # Subclasses may add validation methods for each field specified in `_getUpdateActions`.  If such
     #     # a method exists, it will be called whenever the associated field changes.  If any validation
     #     # errors are detected, they may be pushed into the `errors` array.  The subclass must return the
-    #     # new value to be used for the field (even if it's just to return `value`).
+    #     # new value to be used for the field (even if it's just to return the same `value`).
     #
     #     if parseInt(value) % 2 is 1 then errors.push 'no odd numbers!'
     #     return value
@@ -93,7 +91,6 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
     # Action Methods ###################################################################
 
     onBeginEditing: (id)->
-        if not @_loadModel? then throw new Error '_loadModel is required'
         if not @_actions?.beginEditing?.success?
             throw new Error '_actions.beginEditing.success is required'
         if not @_actions?.beginEditing?.error?
@@ -137,7 +134,6 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
         @trigger EVENT.DONE, @_view.id
 
     onSave: ->
-        if not @_saveModel? then throw new Error '_saveModel is required'
         if not @_actions?.save?.success? then throw new Error '_actions.save.success is required'
         if not @_actions?.save?.error? then throw new Error '_actions.save.error is required'
         return unless @isEditing()
@@ -170,7 +166,7 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
 
         @_markValid field
 
-        value = value.trim()
+        value = if _.isString(value) then value.trim() else value
         if value.length is 0
             value = null
 

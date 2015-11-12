@@ -4,16 +4,18 @@
 #
 
 angular     = require 'angular'
+_           = require '../../../underscore'
 {EVENT}     = require '../../../constants'
 {PAGE_SIZE} = require '../../../constants'
 
 ############################################################################################################
 
-angular.module('mixins').factory 'PageStoreMixinActions', (reflux)->
-    reflux.createActions
-        loadPage: { children: ['success', 'error'] }
-        nextPage: {}
-        prevPage: {}
+angular.module('mixins').factory 'addPageStoreMixinActions', (reflux)->
+    return (actions)->
+        return _.extend actions, reflux.createActions
+            loadPage: { children: ['success', 'error'] }
+            nextPage: {}
+            prevPage: {}
 
 ############################################################################################################
 

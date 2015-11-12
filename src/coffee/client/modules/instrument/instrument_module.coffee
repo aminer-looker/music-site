@@ -4,11 +4,15 @@
 #
 
 angular = require 'angular'
-_       = require 'underscore'
+_       = require '../../../underscore'
 
 ############################################################################################################
 
-instrumentModule = angular.module 'instrument', ['reflux', 'schema']
+instrumentModule = angular.module 'instrument', [
+    'mixins'
+    'reflux'
+    'schema'
+]
 
 require './instrument_list_store'
 

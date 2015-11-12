@@ -4,13 +4,12 @@
 #
 
 angular = require 'angular'
-_       = require '../../../underscore'
 {EVENT} = require '../../../constants'
 
 ############################################################################################################
 
-angular.module('composer').factory 'ComposerModelActions', (ModelStoreMixinActions)->
-    return _.extend {}, ModelStoreMixinActions
+angular.module('composer').factory 'ComposerModelActions', (addModelStoreMixinActions)->
+    return addModelStoreMixinActions {}
 
 ############################################################################################################
 

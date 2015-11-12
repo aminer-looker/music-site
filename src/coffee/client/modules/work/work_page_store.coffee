@@ -9,8 +9,8 @@ _           = require '../../../underscore'
 
 ############################################################################################################
 
-angular.module('work').factory 'WorkPageActions', (PageStoreMixinActions, reflux)->
-    return _.extend {}, PageStoreMixinActions
+angular.module('work').factory 'WorkPageActions', (addPageStoreMixinActions, reflux)->
+    return addPageStoreMixinActions {}
 
 ############################################################################################################
 
