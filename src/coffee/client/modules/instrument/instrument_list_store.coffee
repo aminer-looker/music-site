@@ -27,5 +27,3 @@ angular.module('instrument').factory 'InstrumentListStore', (
 
         _loadAll: ->
             return Instrument.findAll()
-                .then (models)->
-                    return (m.toReadOnlyView() for m in models)

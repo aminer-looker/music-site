@@ -36,5 +36,3 @@ angular.module('work').factory 'WorkModelStore', (
             Work.find id
                 .then (work)->
                     Work.loadRelations work, relations
-                .then (work)->
-                    return work.toReadOnlyView()

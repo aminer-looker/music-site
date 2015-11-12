@@ -19,13 +19,11 @@ angular.module('composer').factory 'ComposerModelStore', (
     reflux.createStore
         init: ->
             @_actions = ComposerModelActions
-            @listenToMany ComposerModelActions
+            @listenToMany @_actions
 
         mixins: [ModelStoreMixin]
 
         # ModelStoreMixin Methods ######################################################
 
         _loadModel: (id)->
-            Composer.find id
-                .then (composer)->
-                    return composer.toReadOnlyView()
+            return Composer.find id

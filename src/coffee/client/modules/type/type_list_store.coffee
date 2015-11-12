@@ -27,5 +27,3 @@ angular.module('type').factory 'TypeListStore', (
 
         _loadAll: ->
             return Type.findAll()
-                .then (models)->
-                    return (m.toReadOnlyView() for m in models)

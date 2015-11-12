@@ -3,9 +3,10 @@
 # All rights reserved.
 #
 
-angular = require 'angular'
-_       = require '../../../underscore'
-{EVENT} = require '../../../constants'
+_            = require '../../../underscore'
+angular      = require 'angular'
+{EVENT}      = require '../../../constants'
+ReadOnlyView = require '../../../read_only_view'
 
 ############################################################################################################
 
@@ -105,26 +106,26 @@ angular.module('mixins').factory 'EditorStoreMixin', (ErrorActions)->
             .catch (error)=>
                 @_actions.beginEditing.error id, error
 
-    onBeginEditingSuccess: (id, model)->
-        @_error            = null
-        @_isEditing        = true
-        @_validationErrors = {}
-        @_model            = model
-
-        @_view = model.toReadOnlyView()
-        if _.isFunction @_getUpdateActions
-            @_view.setActions @_getUpdateActions()
-
-        @trigger EVENT.ERROR, id
-        @trigger EVENT.INVALID, id
-        @trigger EVENT.CHANGE, id
-
     onBeginEditingError: (id, error)->
         @_error = error
 
         @trigger EVENT.ERROR, id
         @trigger EVENT.DONE, id
         ErrorActions.addError error
+
+    onBeginEditingSuccess: (id, model)->
+        @_error            = null
+        @_isEditing        = true
+        @_validationErrors = {}
+        @_model            = model
+        @_view             = ReadOnlyView.convertObject model
+
+        if _.isFunction @_getUpdateActions
+            @_view.setActions @_getUpdateActions()
+
+        @trigger EVENT.ERROR, id
+        @trigger EVENT.INVALID, id
+        @trigger EVENT.CHANGE, id
 
     onCancel: ->
         return unless @isEditing()

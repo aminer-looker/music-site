@@ -3,9 +3,10 @@
 # All rights reserved.
 #
 
-angular = require 'angular'
 _       = require '../../../underscore'
+angular = require 'angular'
 {EVENT} = require '../../../constants'
+ReadOnlyView = require '../../../read_only_view'
 
 ############################################################################################################
 
@@ -48,11 +49,11 @@ angular.module('mixins').factory 'ModelStoreMixin', (
             .catch (error)=>
                 @_actions.load.error id, error
 
-    onLoadSuccess: (id, model)->
-        @_model = model
-        @trigger EVENT.CHANGE, id
-
     onLoadError: (id, error)->
         @_error = error
         @trigger EVENT.ERROR, id
         ErrorActions.addError error
+
+    onLoadSuccess: (id, model)->
+        @_model = ReadOnlyView.convertObject model
+        @trigger EVENT.CHANGE, id

@@ -3,10 +3,11 @@
 # All rights reserved.
 #
 
-angular     = require 'angular'
-_           = require '../../../underscore'
-{EVENT}     = require '../../../constants'
-{PAGE_SIZE} = require '../../../constants'
+_            = require '../../../underscore'
+angular      = require 'angular'
+{EVENT}      = require '../../../constants'
+{PAGE_SIZE}  = require '../../../constants'
+ReadOnlyView = require '../../../read_only_view'
 
 ############################################################################################################
 
@@ -20,7 +21,7 @@ angular.module('mixins').factory 'addPageStoreMixinActions', (reflux)->
 ############################################################################################################
 
 angular.module('mixins').factory 'PageStoreMixin', (
-    $q, ErrorActions, Page, reflux, Work, WorkPageActions
+    $q, ErrorActions, Page
 )->
     # Public Methods ###################################################################
 
@@ -42,21 +43,21 @@ angular.module('mixins').factory 'PageStoreMixin', (
     _loadTotal: ->
         # Users of this mixin must override this method to fetch the total number of objects across all
         # possible pages.  It should return a promise which resolves to that number.
-        throw new Error 'PageStoreMixin requires you to implement _loadTotal'
+        throw new Error 'PageStoreMixin requires _loadTotal'
 
     _loadPageList: (offset, limit)->
         # Users of this mixin must override this method to fetch the given range of objects. It should
         # return a promise which resolves to the requested list. The given objects should be in whatever
         # form is property to expose to the view layer.
-        throw new Error 'PageStoreMixin requires you to implement _loadPageList'
+        throw new Error 'PageStoreMixin requires _loadPageList'
 
     # Action Methods ###################################################################
 
     onLoadPage: (pageNumber)->
         if not @_actions.loadPage?.success?
-            throw new Error 'this._actions.loadPage.success is required'
+            throw new Error 'PageStoreMixin requires _actions.loadPage.success'
         if not @_actions.loadPage?.error?
-            throw new Error 'this._actions.loadpage.error is required'
+            throw new Error 'PageStoreMixin requires _actions.loadpage.error'
 
         return unless @_canLoad()
 
@@ -84,11 +85,11 @@ angular.module('mixins').factory 'PageStoreMixin', (
         ErrorActions.addError error
 
     onLoadPageSuccess: (pageNumber, data)->
-        @_page = new Page pageNumber, data.totalPages, data.list
+        @_page = new Page pageNumber, data.totalPages, ReadOnlyView.convertObject data.list
         @trigger EVENT.CHANGE, pageNumber
 
     onNextPage: ->
-        if not @_actions.loadPage? then throw new Error 'this._actions.loadPage is required'
+        if not @_actions.loadPage? then throw new Error 'PageStoreMixin requires _actions.loadPage'
 
         if @_page?
             return unless @_page.hasNextPage()
@@ -99,7 +100,7 @@ angular.module('mixins').factory 'PageStoreMixin', (
         @_actions.loadPage pageNumber
 
     onPrevPage: ->
-        if not @_actions.loadPage? then throw new Error 'this._actions.loadPage is required'
+        if not @_actions.loadPage? then throw new Error 'PageStoreMixin requires _actions.loadPage'
 
         if @_page?
             return unless @_page.hasPrevPage()

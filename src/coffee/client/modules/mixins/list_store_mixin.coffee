@@ -3,9 +3,10 @@
 # All rights reserved.
 #
 
-angular = require 'angular'
-_       = require '../../../underscore'
-{EVENT} = require '../../../constants'
+_            = require '../../../underscore'
+angular      = require 'angular'
+{EVENT}      = require '../../../constants'
+ReadOnlyView = require '../../../read_only_view'
 
 ############################################################################################################
 
@@ -53,5 +54,5 @@ angular.module('mixins').factory 'ListStoreMixin', (
         ErrorActions.addError error
 
     onLoadAllSuccess: (models)->
-        @_models = models
+        @_models = ReadOnlyView.convertObject models
         @trigger EVENT.CHANGE

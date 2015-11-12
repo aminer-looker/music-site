@@ -41,5 +41,3 @@ angular.module('work').factory 'WorkPageStore', (
 
         _loadPageList: (offset, limit)->
             Work.findAll composer_id:@_composerId, offset:offset, limit:limit
-                .then (models)->
-                    return (m.toReadOnlyView() for m in models)
