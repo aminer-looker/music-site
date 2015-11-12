@@ -16,30 +16,18 @@ require 'js-data-angular'
 require './modules/reflux'
 
 # Include all our modules so they can register with Angular
-require './modules/client_schema'
-require './modules/composer/composer_module'
-require './modules/dialog/dialog_module'
-require './modules/error/error_module'
-require './modules/instrument/instrument_module'
-require './modules/mixins/mixins_module'
-require './modules/page'
-require './modules/type/type_module'
-require './modules/work/work_module'
+require './modules/module_index'
 
 # Include Angular and its extensions
 angular = require 'angular'
 require 'angular-animate'
 
+# List all modules required by the root template of a page
 MODULES = [
     'composer'
-    'dialog'
-    'instrument'
-    'mixins'
     'ngAnimate'
-    'page'
     'reflux'
     'schema'
-    'type'
     'work'
 ]
 

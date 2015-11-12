@@ -9,18 +9,9 @@ _       = require 'underscore'
 ############################################################################################################
 
 angular.module('composer').controller 'ComposerModelController', (
-    $location, $scope, $timeout, ComposerActions, ComposerModelStore
+    $scope, ComposerActions, ComposerModelStore, UrlUtils
 )->
     ComposerModelStore.$listen $scope, (event, id)->
         $scope.composer = ComposerModelStore.get()
 
-    readLocationForId = ->
-        match = /.*\/(.*)$/.exec $location.path()
-        return null unless match?
-
-        id = parseInt match[1]
-        return null unless _.isNumber id
-
-        return id
-
-    ComposerActions.load readLocationForId()
+    ComposerActions.load UrlUtils.findId()

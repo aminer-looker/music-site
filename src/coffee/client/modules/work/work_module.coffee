@@ -18,6 +18,7 @@ workModule = angular.module 'work', [
     'reflux'
     'schema'
     'type'
+    'url'
 ]
 
 require './work_editor_controller'

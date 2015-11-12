@@ -11,7 +11,7 @@ _              = require 'underscore'
 ############################################################################################################
 
 angular.module('work').controller 'WorkModelController', (
-    $location, $scope, DialogActions, DialogStore, WorkEditorStore, WorkModelStore, WorkActions
+    $scope, DialogActions, DialogStore, UrlUtils, WorkEditorStore, WorkModelStore, WorkActions
 )->
     WorkModelStore.$listen $scope, (event, id)->
         $scope.work = WorkModelStore.get()
@@ -38,13 +38,4 @@ angular.module('work').controller 'WorkModelController', (
         WorkActions.beginEditing $scope.work.id
         DialogActions.open $scope.dialogName
 
-    readLocationForId = ->
-        match = /.*\/(.*)$/.exec $location.path()
-        return null unless match?
-
-        id = parseInt match[1]
-        return null unless _.isNumber id
-
-        return id
-
-    WorkActions.load readLocationForId()
+    WorkActions.load UrlUtils.findId()
