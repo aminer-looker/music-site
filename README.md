@@ -4,17 +4,21 @@ A simple site to test the use of [JSData](www.js-data.io/), [Reflux](https://www
 
 This example requires the following software packages be installed.  Please install any you are missing.  All commands should be run from the root of your local repository.
 
-1. Brew: following the directions on [brew.sh](http://brew.sh)
-2. MySQL: `brew install mysql`
-3. NodeJS: `brew install nodejs`
-4. CoffeeScript: `npm install -g coffee-script`
-5. NodeMon: `npm install -g nodemon`
-6. Grunt: `npm install -g grunt-cli`
-7. NPM Dependencies: `npm install`
-8. Load local DB: `./scripts/create-database`
+| Package          | Command                                 |
+|------------------|-----------------------------------------|
+| Brew             | directions on [brew.sh](http://brew.sh) |
+| MySQL            | `brew install mysql`                    |
+| NodeJS           | `brew install nodejs`                   |
+| CoffeeScript     | `npm install -g coffee-script`          |
+| NodeMon          | `npm install -g nodemon`                |
+| Grunt            | `npm install -g grunt-cli`              |
+| NPM Dependencies | `npm install`                           |
+| Load local DB    | `./scripts/create-database`             |
 
 ### Running Locally
 
-To run the server: `grunt start`
-To start watching the code: `grunt watch`
-To run tests: `grunt test`
+| Task            | Command       |
+|-----------------|---------------|
+| run the server  | `grunt start` |
+| watch the code  | `grunt watch` |
+| run tests       | `grunt test`  |
