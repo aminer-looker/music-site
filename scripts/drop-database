@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if ! which mysql &>/dev/null; then
+    echo "Please install MySQL before proceeding."
+    exit 1
+fi
+
+mysql -u root <<SQL
+drop database music;
+drop user 'music-site-app'@'localhost'
+SQL

@@ -1,6 +1,14 @@
 #!/bin/bash
 
+if ! which mysql &>/dev/null; then
+    echo "Please install MySQL before proceeding."
+    exit 1
+fi
+
 mysql -u root <<SQL
+create database music;
 create user 'music-site-app'@'localhost' identified by '9q{o3bBt7M11';
 grant select, insert, update, delete on music.* to 'music-site-app'@'localhost';
 SQL
+
+mysql -u root music < database-dump.sql
