@@ -49,8 +49,7 @@
     "js-data-angular": "^3.1.0",
     "js-data-sql": "^0.9.2",
     "mysql": "^2.9.0",
-    "react": "^0.14.0",
-    "reflux": "^0.3.0",
+    "reflux-core": "^0.3.0",
     "underscore": "^1.8.3",
     "underscore.inflections": "^0.2.1",
     "when": "^3.7.3"

@@ -4,7 +4,7 @@
 #
 
 angular = require 'angular'
-reflux = require 'reflux'
+reflux = require 'reflux-core'
 
 ############################################################################################################
 

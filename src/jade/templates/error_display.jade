@@ -4,10 +4,10 @@
 //-
 
 .content(ng-repeat="error in errors")
-    {{error.message}}
+    | {{error.message}}
 
     .stacktrace(ng-show"error.stack")
-        {{error.stack}}
+        | {{error.stack}}
 
     a.close(ng-click="dismiss(error.id)")
         img(src="/images/close-button.png")

@@ -11,7 +11,7 @@
     )
 .errors
     p(ng-repeat='message in errors.instrument_id')
-        {{message}}
+        | {{message}}
 
 .row
     label type
@@ -21,21 +21,21 @@
     )
 .errors
     p(ng-repeat='message in errors.type_id')
-        {{message}}
+        | {{message}}
 
 .row
     label composed
     input(ng-model='work.composed_year')
 .errors
     p(ng-repeat='message in errors.composed_year')
-        {{message}}
+        | {{message}}
 
 .row
     label difficulty
     input(ng-model='work.difficulty')
 .errors
     p(ng-repeat='message in errors.difficulty')
-        {{message}}
+        | {{message}}
 
 .button-bar
     input(ng-click='save()' ng-disabled='!isValid' type='submit' value='Save')
