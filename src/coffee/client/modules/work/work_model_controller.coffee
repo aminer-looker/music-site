@@ -3,8 +3,8 @@
 # All rights reserved.
 #
 
-angular        = require 'angular'
 _              = require 'underscore'
+angular        = require 'angular'
 {DIALOG_STATE} = require '../../../constants'
 {EVENT}        = require '../../../constants'
 

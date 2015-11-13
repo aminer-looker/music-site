@@ -33,10 +33,10 @@ angular.module('work').factory 'WorkPageStore', (
         # PageStoreMixin Methods #######################################################
 
         _canLoad: ->
-            @_composerId?
+            return @_composerId?
 
         _loadTotal: ->
-            Work.count composer_id:@_composerId
+            return Work.count composer_id:@_composerId
 
         _loadPageList: (offset, limit)->
-            Work.findAll composer_id:@_composerId, offset:offset, limit:limit
+            return Work.findAll composer_id:@_composerId, offset:offset, limit:limit

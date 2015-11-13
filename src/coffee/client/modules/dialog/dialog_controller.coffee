@@ -11,6 +11,7 @@ _              = require 'underscore'
 ############################################################################################################
 
 angular.module('dialog').controller 'DialogController', ($scope, DialogActions, DialogStore)->
+
     DialogStore.$listen $scope, (event, name)->
         return unless event is EVENT.CHANGE
         return unless name is $scope.name

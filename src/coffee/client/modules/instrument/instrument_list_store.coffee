@@ -3,8 +3,8 @@
 # All rights reserved.
 #
 
-angular = require 'angular'
 _       = require '../../../underscore'
+angular = require 'angular'
 
 ############################################################################################################
 

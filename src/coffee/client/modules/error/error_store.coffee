@@ -3,8 +3,8 @@
 # All rights reserved.
 #
 
-angular              = require 'angular'
 _                    = require 'underscore'
+angular              = require 'angular'
 {ERROR_DISPLAY_TIME} = require '../../../constants'
 {EVENT}              = require '../../../constants'
 
@@ -15,15 +15,15 @@ angular.module('error').factory 'ErrorActions', (reflux)->
 
 ############################################################################################################
 
-angular.module('error').factory 'ErrorStore', ($timeout, ErrorActions, reflux)->
-
-    getNextErrorId = ->
-        return _.uniqueId 'error-'
-
+angular.module('error').factory 'ErrorStore', (
+    $timeout, ErrorActions, reflux
+)->
     reflux.createStore
+
         init: ->
             @_errors = []
-            @listenToMany ErrorActions
+
+        listenables: ErrorActions
 
         getMostRecent: ->
             return null unless @_errors.length > 0
@@ -35,7 +35,7 @@ angular.module('error').factory 'ErrorStore', ($timeout, ErrorActions, reflux)->
         onAddError: (error, timeout=null)->
             timeout ?= ERROR_DISPLAY_TIME
 
-            error.id = getNextErrorId()
+            error.id = _.uniqueId 'error-'
             @_errors.unshift error
 
             @trigger EVENT.ADD, error.id
