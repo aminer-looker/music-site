@@ -10,6 +10,7 @@ This example requires the following software packages be installed.  Please inst
 | MySQL            | `brew install mysql`                    |
 | NodeJS           | `brew install nodejs`                   |
 | CoffeeScript     | `npm install -g coffee-script`          |
+| SASS             | `gem install sass`                      |
 | Browserify       | `npm install -g browserify`             |
 | NodeMon          | `npm install -g nodemon`                |
 | Grunt            | `npm install -g grunt-cli`              |
