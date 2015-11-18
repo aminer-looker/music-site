@@ -10,6 +10,7 @@ This example requires the following software packages be installed.  Please inst
 | MySQL            | `brew install mysql`                    |
 | NodeJS           | `brew install nodejs`                   |
 | CoffeeScript     | `npm install -g coffee-script`          |
+| Browserify       | `npm install -g browserify`             |
 | NodeMon          | `npm install -g nodemon`                |
 | Grunt            | `npm install -g grunt-cli`              |
 | NPM Dependencies | `npm install`                           |
@@ -17,8 +18,9 @@ This example requires the following software packages be installed.  Please inst
 
 ### Running Locally
 
-| Task            | Command       |
-|-----------------|---------------|
-| run the server  | `grunt start` |
-| watch the code  | `grunt watch` |
-| run tests       | `grunt test`  |
+| Task              | Command       |
+|-------------------|---------------|
+| build the project | `grunt build` |
+| run the server    | `grunt start` |
+| watch the code    | `grunt watch` |
+| run tests         | `grunt test`  |
